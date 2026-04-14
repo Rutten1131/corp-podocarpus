@@ -7,36 +7,33 @@ import {
   LayoutDashboard,
   Users,
   DollarSign,
-  Bus,
   MapPin,
   Route,
-  Shield,
-  BarChart3,
-  MessageSquare,
-  Settings,
+  Wrench,
   ChevronLeft,
   ChevronRight,
-  LogOut,
   Bell,
   Search,
-  Briefcase,
-  Wrench,
-  QrCode,
-  Landmark
+  Landmark,
+  Megaphone,
+  Monitor,
+  Banknote,
+  TrendingUp
 } from "lucide-react";
+import { PodocarpusLogo } from "./PodocarpusLogo";
 
-// Tipos de perfil
 type ProfileType = "cooperativa" | "socio";
 
-// Menú Cooperativa (Gerente)
 const NAV_COOPERATIVA = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Socios", href: "/dashboard/socios", icon: Users },
   { label: "Tracking GPS", href: "/dashboard/tracking", icon: MapPin },
   { label: "Contabilidad", href: "/dashboard/contabilidad", icon: Landmark },
+  { label: "Marketing", href: "/dashboard/marketing", icon: Megaphone },
+  { label: "Publicidad", href: "/dashboard/publicidad", icon: Monitor },
+  { label: "Monetización", href: "/dashboard/monetizacion", icon: Banknote },
 ];
 
-// Menú Socio (Operador)
 const NAV_SOCIO = [
   { label: "Cobranzas", href: "/dashboard/cobranzas", icon: DollarSign },
   { label: "Mi Ruta", href: "/dashboard/rutas", icon: Route },
@@ -45,9 +42,7 @@ const NAV_SOCIO = [
   { label: "Mantenimiento", href: "/dashboard/mantenimiento", icon: Wrench },
 ];
 
-// Contexto simulado global para el MVP
 export const useProfile = () => {
-  // En un entorno real esto usaría Context API o Zustand
   const [profile, setProfile] = useState<ProfileType>("cooperativa");
   return { profile, setProfile };
 };
@@ -56,7 +51,6 @@ export default function Sidebar() {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   
-  // Configuración del perfil basado en la URL
   const [profile, setProfile] = useState<ProfileType>("cooperativa");
   const searchParams = useSearchParams();
 
@@ -73,28 +67,24 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 h-screen bg-surface-900 text-white flex flex-col transition-all duration-300 ${
+      className={`fixed left-0 top-0 z-40 h-screen bg-andina-surface border-r border-andina-border flex flex-col transition-all duration-300 ${
         collapsed ? "w-[72px]" : "w-[260px]"
       }`}
     >
-      {/* Logo as Link back to Home */}
-      <Link href="/" className="flex items-center gap-3 px-4 h-16 border-b border-surface-700/50 hover:bg-surface-800 transition-colors">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-lg font-bold text-surface-900 shrink-0">
-          P
-        </div>
+      <Link href="/" className="flex items-center gap-3 px-4 h-16 border-b border-andina-border hover:bg-white/5 transition-colors group">
+        <PodocarpusLogo size="md" />
         {!collapsed && (
           <div className="overflow-hidden">
-            <h1 className="text-sm font-bold leading-tight truncate text-white">Podocarpus</h1>
-            <p className="text-[10px] text-surface-400 leading-tight">CRM Cooperativa</p>
+            <h1 className="text-sm font-heading font-bold tracking-wide text-andina-text truncate">Podocarpus</h1>
+            <p className="text-[10px] text-andina-accent font-mono uppercase tracking-widest mt-0.5">Autoridad Andina</p>
           </div>
         )}
       </Link>
 
-      {/* Nav */}
-      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+      <nav className="flex-1 py-6 space-y-1 overflow-x-hidden overflow-y-auto">
         {!collapsed && (
-           <p className="px-3 text-[10px] text-surface-500 font-semibold uppercase tracking-wider mb-2">
-              {profile === "cooperativa" ? "Módulos Administrativos" : "Gestión Operativa"}
+           <p className="px-5 text-[10px] text-andina-text/40 font-mono uppercase tracking-widest mb-4">
+              {profile === "cooperativa" ? "Módulos" : "Operativa"}
            </p>
         )}
         {navItems.map((item) => {
@@ -107,27 +97,29 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200 group ${
+              className={`relative flex items-center gap-3 px-4 py-3 text-sm font-medium transition-all duration-300 group ${
                 isActive
-                  ? "bg-brand-500/15 text-brand-400"
-                  : "text-surface-400 hover:text-white hover:bg-surface-800"
+                  ? "text-andina-primary bg-andina-primary/5"
+                  : "text-andina-text/60 hover:text-white hover:bg-white/5"
               }`}
             >
+              {isActive && (
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-andina-primary shadow-[0_0_10px_var(--color-andina-primary)]" />
+              )}
               <Icon
                 size={20}
-                className={`shrink-0 ${isActive ? "text-brand-400" : "text-surface-500 group-hover:text-brand-400"}`}
+                className={`shrink-0 transition-transform duration-300 group-hover:translate-x-1 ${isActive ? "text-andina-primary" : "text-andina-text/50 group-hover:text-andina-primary/80"}`}
               />
-              {!collapsed && <span className="truncate">{item.label}</span>}
+              {!collapsed && <span className="truncate transition-transform duration-300 group-hover:translate-x-1">{item.label}</span>}
             </Link>
           );
         })}
       </nav>
 
-      {/* Collapse Toggle */}
-      <div className="p-2 border-t border-surface-700/50">
+      <div className="p-4 border-t border-andina-border">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center justify-center w-full py-2 rounded-lg text-surface-400 hover:text-white hover:bg-surface-800 transition-colors"
+          className="flex items-center justify-center w-full py-2 rounded-lg text-andina-text/50 hover:text-white hover:bg-white/5 transition-colors"
         >
           {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
         </button>
@@ -136,32 +128,34 @@ export default function Sidebar() {
   );
 }
 
-// Top bar component
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-30 h-16 bg-white/80 backdrop-blur-xl border-b border-surface-200 flex items-center justify-between px-6">
+    <header className="sticky top-0 z-30 h-16 bg-andina-bg/80 backdrop-blur-xl border-b border-andina-border flex items-center justify-between px-6">
       <div className="flex items-center gap-3 flex-1 max-w-md">
-        <div className="relative w-full">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
+        <div className="relative w-full group">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-andina-text/40 group-focus-within:text-andina-primary transition-colors" />
           <input
             type="text"
             placeholder="Buscar..."
-            className="w-full pl-9 pr-4 py-2 rounded-lg bg-surface-100 text-sm text-surface-700 placeholder:text-surface-400 border-0 focus:outline-none focus:ring-2 focus:ring-brand-500/30 transition"
+            className="w-full pl-9 pr-4 py-2 rounded-lg bg-andina-surface border border-andina-border text-sm text-andina-text placeholder:text-andina-text/40 focus:outline-none focus:ring-1 focus:ring-andina-primary/50 focus:border-andina-primary/50 transition-all"
           />
         </div>
       </div>
-      <div className="flex items-center gap-4">
-        <button className="relative p-2 rounded-lg hover:bg-surface-100 transition-colors">
-          <Bell size={20} className="text-surface-500" />
-          <span className="absolute top-1 right-1 w-2 h-2 bg-danger rounded-full" />
+      <div className="flex items-center gap-6">
+        <button className="relative text-andina-text/60 hover:text-white transition-colors hover:scale-110">
+          <Bell size={20} />
+          <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-andina-primary rounded-full border-2 border-andina-bg" />
         </button>
-        <div className="flex items-center gap-3 pl-4 border-l border-surface-200">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-xs font-bold text-surface-900 border-2 border-white shadow-sm">
-            WG
+        <div className="flex items-center gap-3 pl-6 border-l border-andina-border">
+          <div className="text-right hidden sm:block">
+            <p className="text-sm font-semibold text-andina-text leading-tight">Usuario Demo</p>
+            <div className="flex items-center justify-end gap-1.5 mt-0.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-andina-primary animate-pulse shadow-[0_0_5px_var(--color-andina-primary)]"></span>
+              <p className="text-[10px] text-andina-primary font-mono uppercase tracking-wider">Conectado</p>
+            </div>
           </div>
-          <div className="hidden sm:block">
-            <p className="text-sm font-semibold text-surface-800 leading-tight">Usuario Demo</p>
-            <p className="text-[11px] text-brand-600 font-medium">Conectado</p>
+          <div className="w-9 h-9 rounded-full bg-andina-surface flex items-center justify-center text-xs font-bold text-andina-text border border-andina-border hover:border-andina-primary/50 cursor-pointer transition-colors">
+            WG
           </div>
         </div>
       </div>

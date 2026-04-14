@@ -12,7 +12,7 @@ export default function RutasPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-surface-900 tracking-tight">Mi Ruta Asignada</h2>
-          <p className="text-surface-500 text-sm mt-1">Hoja de ruta diaria y listado de paradas (Busetero)</p>
+          <p className="text-surface-500 text-sm mt-1">Hoja de ruta diaria y listado de paradas (Hoja de Socio)</p>
         </div>
         <div className="flex items-center gap-3">
           <button className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 px-4 py-2 rounded-lg text-sm font-bold text-white transition-colors shadow-sm">
