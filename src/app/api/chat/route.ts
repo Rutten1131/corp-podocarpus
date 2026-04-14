@@ -17,60 +17,76 @@ CONOCIMIENTO DE LA EMPRESA:
 - Objetivo: Convertir buses en empresas individuales rentables.
 
 FLUJO DE NOTIFICACIÓN:
-- Si detectas que el usuario está interesado en contratar un servicio o desea una cotización, pídele amablemente su nombre y teléfono (si no los ha dado) y dile que un asesor le contactará pronto.
+- Si detectas que el usuario está interesado en contratar un servicio o desea una cotización (interés comercial real), pídele amablemente su nombre y teléfono si no los ha dado.
 `;
 
 export async function POST(req: Request) {
   try {
     const { message, history, settings } = await req.json();
 
-    // En una implementación real, aquí llamaríamos a OpenAI o Gemini.
-    // Para la Demo, simularemos una respuesta inteligente basada en palabras clave.
-    
+    // Prioridad: 1. Settings del CRM, 2. Variables de entorno .env
+    const config = {
+      apiUrl: settings?.evolutionApiUrl || process.env.EVOLUTION_API_URL,
+      apiKey: settings?.evolutionApiKey || process.env.EVOLUTION_API_KEY,
+      instance: settings?.evolutionInstance || process.env.EVOLUTION_INSTANCE,
+      numbers: settings?.notificationNumbers || "593987654321" // Default de respaldo
+    };
+
+    // Lógica de respuesta IA (Simulada para la demo)
     let aiResponse = "He recibido tu mensaje. ¿En qué más puedo asistirte con respecto a los servicios de la Cooperativa Podocarpus?";
     let shouldNotify = false;
 
     const lowerMsg = message.toLowerCase();
     
     if (lowerMsg.includes("hola") || lowerMsg.includes("buenos días")) {
-      aiResponse = "¡Hola! Bienvenido al portal de la Cooperativa Podocarpus. Soy tu asistente virtual. ¿Te gustaría saber más sobre nuestro transporte escolar o cómo blindamos el patrimonio de nuestros socios?";
+      aiResponse = "¡Hola! Bienvenido al portal de la Cooperativa Podocarpus. Soy tu asistente virtual. ¿Te gustaría saber más sobre nuestro transporte escolar o servicio para empresas?";
     } else if (lowerMsg.includes("escolar") || lowerMsg.includes("colegio") || lowerMsg.includes("escuela")) {
-      aiResponse = "Nuestro servicio de transporte escolar es líder en Loja. Ofrecemos tracking GPS en tiempo real para padres, cámaras internas y conductores certificados. ¿Deseas que un asesor te envíe una propuesta para tu institución?";
+      aiResponse = "Nuestro servicio de transporte escolar es líder en Loja. Ofrecemos tracking GPS en tiempo real, cámaras internas y conductores certificados. ¿Deseas que un asesor te envíe una propuesta institucional?";
       shouldNotify = true;
     } else if (lowerMsg.includes("institucional") || lowerMsg.includes("empresa") || lowerMsg.includes("convenio")) {
-      aiResponse = "Manejamos convenios corporativos premium con control de asistencia digital y seguro de pasajeros completo. Es ideal para optimizar la logística de tu personal. ¿Me podrías dejar un contacto para llamarte?";
+      aiResponse = "Manejamos convenios corporativos premium con control de asistencia digital. Es ideal para optimizar la logística de tu personal. ¿Me podrías dejar un contacto para llamarte?";
       shouldNotify = true;
     } else if (lowerMsg.includes("costo") || lowerMsg.includes("precio") || lowerMsg.includes("cuanto cuesta") || lowerMsg.includes("cotizar")) {
-      aiResponse = "Los costos se personalizan según la ruta y el número de unidades. Si me proporcionas tu nombre y teléfono, el departamento comercial te enviará una cotización formal en menos de 24 horas.";
+      aiResponse = "Los costos se personalizan según la ruta. Si me proporcionas tu nombre y teléfono, el departamento comercial te enviará una cotización formal en breve.";
       shouldNotify = true;
-    } else if (lowerMsg.includes("mantenimiento") || lowerMsg.includes("gps") || lowerMsg.includes("tracking")) {
-      aiResponse = "Nuestro sistema integra analítica predictiva que avisa a los socios cuándo deben realizar mantenimientos preventivos, evitando emergencias y protegiendo la inversión. Todo se monitorea desde nuestro dashboard VIP.";
     }
 
-    // Lógica de Notificación a WhatsApp (Evolution API)
-    if (shouldNotify && settings && settings.aiEnabled && settings.evolutionApiUrl && settings.notificationNumbers) {
-      const numbers = settings.notificationNumbers.split(",").map((n: string) => n.trim());
+    // Ejecución Real de Evolution API
+    if (shouldNotify && config.apiUrl && config.apiKey && config.instance) {
+      const numbers = config.numbers.split(",").map((n: string) => n.trim().replace("+", ""));
       
-      // Simulamos la llamada a Evolution API
-      // En producción esto enviaría el mensaje real
-      console.log(`[SIMULACIÓN NOTIFICACIÓN WHATSAPP]`);
-      console.log(`A: ${numbers.join(", ")}`);
-      console.log(`MENSAJE: 🔔 *Nuevo Interesado DETECTADO*\nEl cliente dice: "${message}"\nRespuesta IA: "${aiResponse}"`);
-      
-      try {
-        // Estructura para Evolution API
-        // const response = await fetch(`${settings.evolutionApiUrl}/message/sendText/${settings.evolutionInstance}`, {
-        //   method: 'POST',
-        //   headers: { 'apikey': settings.evolutionApiKey, 'Content-Type': 'application/json' },
-        //   body: JSON.stringify({
-        //     number: numbers[0], 
-        //     options: { delay: 1200, presence: "composing" },
-        //     textMessage: { text: `🔔 *ALERTA CRM*\n\nNuevo lead interesado detectado por el Asistente IA.\n\n*Cliente dice:* "${message}"\n\nFavor contactar a la brevedad.` }
-        //   })
-        // });
-      } catch (err) {
-        console.error("Error enviando notificación a Evolution API", err);
-      }
+      console.log(`[EVOLUTION API] Intentando notificar a: ${numbers.join(", ")}`);
+
+      // Enviamos la notificación de forma asíncrona (no bloqueamos la respuesta del chat)
+      numbers.forEach(async (number) => {
+        try {
+          // Limpiar número (Evolution prefiere formato: 593999999999)
+          const cleanNumber = number.includes("@s.whatsapp.net") ? number : `${number}@s.whatsapp.net`;
+          
+          const response = await fetch(`${config.apiUrl}/message/sendText/${config.instance}`, {
+            method: 'POST',
+            headers: { 
+              'apikey': config.apiKey, 
+              'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify({
+              number: number, // Evolution maneja el sufijo automáticamente si se pasa solo número
+              options: { delay: 1200, presence: "composing" },
+              textMessage: { 
+                text: `🔔 *ALERTA PODOCARPUS*\n\nNuevo lead interesado detectado por el Asistente IA.\n\n*Cliente dice:* "${message}"\n*Respuesta enviada:* "${aiResponse}"\n\n_Favor contactar a la brevedad._` 
+              }
+            })
+          });
+
+          if (!response.ok) {
+            console.error(`Error Evolution API para ${number}:`, await response.text());
+          } else {
+            console.log(`✅ Notificación enviada con éxito a ${number}`);
+          }
+        } catch (err) {
+          console.error(`Fallo crítico al llamar a Evolution API para ${number}:`, err);
+        }
+      });
     }
 
     return NextResponse.json({ 
