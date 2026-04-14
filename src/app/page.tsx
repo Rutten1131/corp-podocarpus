@@ -1,65 +1,67 @@
-import Image from "next/image";
+import Link from "next/link";
+import { ShieldCheck, Bus, KeyRound, Building2, UserCircle2 } from "lucide-react";
 
-export default function Home() {
+export default function RoleSelectionPage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-surface-50 flex flex-col items-center justify-center relative overflow-hidden">
+      {/* Background decoration */}
+      <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-brand-400/20 rounded-full blur-[120px]"></div>
+      <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-info/10 rounded-full blur-[120px]"></div>
+
+      <div className="z-10 w-full max-w-4xl px-6 flex flex-col items-center">
+        <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-surface-200 flex items-center justify-center text-3xl font-extrabold text-brand-600 mb-6 relative">
+          P
+          <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-surface-900 rounded-full flex items-center justify-center text-white border-2 border-white">
+            <KeyRound size={14} />
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <h1 className="text-4xl md:text-5xl font-extrabold text-surface-900 tracking-tight leading-tight mb-3 text-center">
+          Acceso al Sistema
+        </h1>
+        <p className="text-surface-500 max-w-md text-center mb-10">
+          Bienvenido al CRM de Cooperativa Podocarpus. Seleccione su perfil para ingresar a su área de trabajo correspondiente.
+        </p>
+
+        <div className="grid md:grid-cols-2 gap-6 w-full max-w-3xl">
+          {/* Perfil Gerencia */}
+          <Link 
+            href="/dashboard?role=cooperativa"
+            className="group bg-white hover:bg-surface-900 border border-surface-200 hover:border-surface-900 p-8 rounded-3xl shadow-sm hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <div className="w-16 h-16 rounded-2xl bg-surface-100 group-hover:bg-surface-800 flex items-center justify-center mb-6 transition-colors duration-300">
+               <Building2 size={32} className="text-surface-700 group-hover:text-white transition-colors" />
+            </div>
+            <h2 className="text-2xl font-bold text-surface-900 group-hover:text-white mb-2 transition-colors">
+              Gerencia y Admin
+            </h2>
+            <p className="text-sm text-surface-500 group-hover:text-surface-400 transition-colors">
+              Control general de flota, contabilidad, reportes SEPS y padrón de socios cooperados.
+            </p>
+          </Link>
+
+          {/* Perfil Socio */}
+          <Link 
+            href="/dashboard?role=socio"
+            className="group bg-white hover:bg-brand-500 border border-surface-200 hover:border-brand-500 p-8 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-brand-500/20 transition-all duration-300 flex flex-col items-center text-center"
           >
-            Documentation
-          </a>
+            <div className="w-16 h-16 rounded-2xl bg-brand-50 group-hover:bg-brand-400/50 flex items-center justify-center mb-6 transition-colors duration-300">
+               <UserCircle2 size={32} className="text-brand-600 group-hover:text-white transition-colors" />
+            </div>
+            <h2 className="text-2xl font-bold text-surface-900 group-hover:text-white mb-2 transition-colors">
+              Socio Operador
+            </h2>
+            <p className="text-sm text-surface-500 group-hover:text-brand-100 transition-colors">
+              Gestión de vehículo, portal de padres, mantenimiento y control de cobros de su ruta assignada.
+            </p>
+          </Link>
         </div>
-      </main>
+
+        <div className="mt-12 text-sm text-surface-400 flex items-center gap-2">
+           <ShieldCheck size={16} className="text-success" />
+           Entorno seguro y encriptado. Versión Demo v1.0.
+        </div>
+      </div>
     </div>
   );
 }
