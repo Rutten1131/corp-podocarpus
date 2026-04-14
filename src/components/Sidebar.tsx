@@ -22,25 +22,10 @@ import {
 } from "lucide-react";
 import { PodocarpusLogo } from "./PodocarpusLogo";
 
+import { NAV_COOPERATIVA, NAV_SOCIO } from "@/lib/navigation";
+import { useModuleContext } from "@/context/module-context";
+
 type ProfileType = "cooperativa" | "socio";
-
-const NAV_COOPERATIVA = [
-  { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Socios", href: "/dashboard/socios", icon: Users },
-  { label: "Tracking GPS", href: "/dashboard/tracking", icon: MapPin },
-  { label: "Contabilidad", href: "/dashboard/contabilidad", icon: Landmark },
-  { label: "Marketing", href: "/dashboard/marketing", icon: Megaphone },
-  { label: "Publicidad", href: "/dashboard/publicidad", icon: Monitor },
-  { label: "Monetización", href: "/dashboard/monetizacion", icon: Banknote },
-];
-
-const NAV_SOCIO = [
-  { label: "Cobranzas", href: "/dashboard/cobranzas", icon: DollarSign },
-  { label: "Mi Ruta", href: "/dashboard/rutas", icon: Route },
-  { label: "Tracking Vehículo", href: "/dashboard/tracking", icon: MapPin },
-  { label: "Portal Padres", href: "/dashboard/padres", icon: Users },
-  { label: "Mantenimiento", href: "/dashboard/mantenimiento", icon: Wrench },
-];
 
 export const useProfile = () => {
   const [profile, setProfile] = useState<ProfileType>("cooperativa");
@@ -63,7 +48,10 @@ export default function Sidebar() {
     }
   }, [searchParams]);
 
-  const navItems = profile === "cooperativa" ? NAV_COOPERATIVA : NAV_SOCIO;
+  const { isModuleVisible } = useModuleContext();
+  const navItems = (profile === "cooperativa" ? NAV_COOPERATIVA : NAV_SOCIO).filter(item => 
+    item.href === "/dashboard" || item.href === "/dashboard/configuracion" || isModuleVisible(item.href)
+  );
 
   return (
     <aside
