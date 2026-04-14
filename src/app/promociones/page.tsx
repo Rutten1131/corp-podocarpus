@@ -48,11 +48,11 @@ export default function PromocionesPage() {
       <Navbar />
       
       {/* Dynamic Billboard Section */}
-      <section className="relative h-screen min-h-[700px] w-full flex items-center justify-center overflow-hidden">
+      <section className="relative h-screen min-h-[600px] md:min-h-[700px] w-full flex items-center justify-center overflow-hidden">
         {/* Background Media */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-t from-andina-bg via-andina-bg/40 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-andina-bg via-transparent to-andina-bg z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-andina-bg via-andina-bg/70 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-r from-andina-bg/80 via-transparent to-andina-bg/80 z-10" />
           
           <AnimatePresence mode="wait">
             <motion.div
@@ -97,8 +97,8 @@ export default function PromocionesPage() {
         </div>
 
         {/* Content Container */}
-        <div className="relative z-20 max-w-7xl mx-auto px-6 w-full">
-          <div className="max-w-4xl">
+        <div className="relative z-20 max-w-7xl mx-auto px-6 w-full py-20">
+          <div className="max-w-4xl text-center md:text-left">
             <motion.div 
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -117,26 +117,26 @@ export default function PromocionesPage() {
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.5 }}
               >
-                <h1 className="text-6xl md:text-8xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-8 max-w-4xl">
+                <h1 className="text-4xl md:text-8xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-8 max-w-4xl drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
                   {ad.heading}
                 </h1>
 
-                <p className="text-xl md:text-2xl text-andina-text/70 leading-relaxed mb-12 max-w-2xl font-light">
+                <p className="text-lg md:text-2xl text-andina-text/90 leading-relaxed mb-12 max-w-2xl font-light mx-auto md:mx-0 drop-shadow-lg">
                   {ad.subheading}
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-5">
+                <div className="flex flex-col sm:flex-row gap-5 items-center justify-center md:justify-start">
                   <Link 
                     href={ad.link}
-                    className="group relative flex items-center justify-center gap-4 bg-andina-primary hover:bg-andina-primary/90 px-10 py-5 rounded-2xl text-lg font-bold text-white transition-all shadow-[0_0_40px_rgba(46,168,79,0.3)]"
+                    className="group relative flex items-center justify-center gap-4 bg-andina-primary hover:bg-andina-primary/90 px-8 py-5 rounded-2xl text-lg font-bold text-white transition-all shadow-[0_0_40px_rgba(46,168,79,0.3)] w-full sm:w-auto"
                   >
                     <span>{ad.cta}</span>
                     <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                   
-                  <button className="flex items-center justify-center gap-3 px-10 py-5 rounded-2xl border border-white/10 text-white/60 hover:text-white hover:bg-white/5 transition-all font-bold backdrop-blur-md">
+                  <button className="flex items-center justify-center gap-3 px-8 py-5 rounded-2xl border border-white/10 text-white/80 hover:text-white hover:bg-white/5 transition-all font-bold backdrop-blur-md w-full sm:w-auto">
                     <Share2 size={20} />
-                    Compartir Código QR
+                    Compartir Promo
                   </button>
                 </div>
               </motion.div>

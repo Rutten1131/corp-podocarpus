@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 export default function TrackingPage() {
   const [activeUnit, setActiveUnit] = useState<string | null>(null);
+  const [isPanelOpen, setIsPanelOpen] = useState(true);
   
   // Simulate live updates for the UI
   const [tick, setTick] = useState(0);
@@ -17,64 +18,51 @@ export default function TrackingPage() {
   }, []);
 
   return (
-    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="h-[calc(100vh-8rem)] flex flex-col space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-surface-900 tracking-tight">Centro de Monitoreo GPS</h2>
-          <p className="text-surface-500 text-sm mt-1">Control satelital de la flota en tiempo real (Prototipo Visual)</p>
+          <h2 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter drop-shadow-lg">Centro de <span className="text-andina-primary">Monitoreo GPS</span></h2>
+          <p className="text-andina-text/60 text-xs font-mono uppercase tracking-[0.2em] mt-1 font-bold italic">Sincronización Satelital Activa</p>
         </div>
-        <div className="flex items-center gap-3">
-           <div className={`flex items-center gap-2 px-4 py-2 bg-success/10 text-success rounded-lg text-sm font-bold transition-all ${tick % 2 === 0 ? 'shadow-[0_0_15px_rgba(16,185,129,0.3)]' : ''}`}>
+        <div className="flex items-center gap-4">
+           <div className={`flex items-center gap-3 px-5 py-2.5 bg-andina-primary/10 text-andina-primary rounded-xl border border-andina-primary/20 text-[10px] font-black uppercase tracking-widest transition-all ${tick % 2 === 0 ? 'shadow-[0_0_20px_rgba(34,197,94,0.3)]' : ''}`}>
              <Radio size={16} className={tick % 2 === 0 ? 'animate-pulse' : ''} />
-             {UNIDADES_GPS.filter(u => u.estado === 'en-ruta').length} UNIDADES EN RUTA
+             {UNIDADES_GPS.filter(u => u.estado === 'en-ruta').length} Unidades en Operativa
            </div>
-           <button className="p-2 bg-white border border-surface-200 rounded-lg text-surface-600 hover:bg-surface-50">
+           <button className="p-3 bg-andina-surface border border-andina-border rounded-xl text-andina-text hover:bg-white/5 shadow-xl">
               <Maximize size={18} />
            </button>
         </div>
       </div>
 
-      <div className="flex-1 rounded-xl border-2 border-surface-200 overflow-hidden relative shadow-md bg-surface-100 flex">
+      <div className="flex-1 rounded-[2.5rem] border border-white/10 overflow-hidden relative shadow-2xl bg-[#0a0f0d] flex">
          
-         {/* MAPA SIMULADO (Fondo estático + Puntos dinámicos usando posiciones absolutas relativas a Loja) */}
-         <div className="absolute inset-0 bg-[#e5e7eb] overflow-hidden">
-            {/* SVG Grid para simular mapa de calles de manera 100% confiable (sin links rotos) */}
+         {/* MAPA SIMULADO (Estilo Dark Control Center) */}
+         <div className="absolute inset-0 bg-[#070b09] overflow-hidden">
             <svg className="absolute inset-0 w-full h-full opacity-60" xmlns="http://www.w3.org/2000/svg">
                <defs>
-                  <pattern id="street-grid" width="120" height="120" patternUnits="userSpaceOnUse">
-                     {/* Cuadras principales (Manzanas) */}
-                     <path d="M 120 0 L 0 0 0 120" fill="none" stroke="#ffffff" strokeWidth="12" />
-                     {/* Calles secundarias */}
-                     <path d="M 60 0 L 60 120 M 0 60 L 120 60" fill="none" stroke="#f3f4f6" strokeWidth="6" />
-                     <path d="M 30 0 L 30 120 M 0 30 L 120 30 M 90 0 L 90 120 M 0 90 L 120 90" fill="none" stroke="#f3f4f6" strokeWidth="2" strokeDasharray="4 4" />
-                  </pattern>
-                  {/* Patrón de áreas verdes / parques */}
-                  <pattern id="parks" width="360" height="360" patternUnits="userSpaceOnUse">
-                     <rect x="20" y="20" width="80" height="80" fill="#d1fae5" rx="8" />
-                     <rect x="200" y="140" width="100" height="60" fill="#d1fae5" rx="8" />
-                     <rect x="80" y="260" width="60" height="60" fill="#d1fae5" rx="8" />
+                  <pattern id="street-grid-dark" width="160" height="160" patternUnits="userSpaceOnUse">
+                     <path d="M 160 0 L 0 0 0 160" fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth="4" />
+                     <path d="M 80 0 L 80 160 M 0 80 L 160 80" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="2" />
                   </pattern>
                </defs>
-               <rect width="100%" height="100%" fill="url(#parks)" />
-               <rect width="100%" height="100%" fill="url(#street-grid)" />
+               <rect width="100%" height="100%" fill="url(#street-grid-dark)" />
+               {/* Simular avenidas principales con luz neon t&aacute;ctica */}
+               <path d="M 0 400 L 2000 400 M 600 0 L 600 1200" stroke="rgba(34, 197, 94, 0.15)" strokeWidth="6" fill="none" />
             </svg>
             
-            {/* Overlay sutil */}
-            <div className="absolute inset-0 bg-brand-500/5 pointer-events-none mix-blend-multiply"></div>
+            <div className="absolute inset-0 bg-radial-gradient(circle, rgba(34,197,94,0.03)_0%, transparent_70%) pointer-events-none"></div>
 
-            {/* Marcadores de GPS renderizados sobre el mapa estático */}
-            {/* Las coordenadas lat/lng del mock (-4.xx, -79.xx) se mapean a % para este demo visual */}
+            {/* Marcadores de GPS: Estilo Premium Neon */}
             {UNIDADES_GPS.map((unidad, index) => {
-               // Pseudo-random movement para los que están en ruta
                let addedLat = 0;
                let addedLng = 0;
                if (unidad.estado === 'en-ruta') {
-                  const speed = unidad.velocidad / 100; // factor de velocidad
+                  const speed = unidad.velocidad / 100;
                   addedLat = Math.sin(tick * speed + index) * 0.003;
                   addedLng = Math.cos(tick * speed + index) * 0.003;
                }
 
-               // Mapping simple para demo de Loja: Centro en -4.00, -79.20 
                const topPos = 50 + (unidad.lat + addedLat + 4.00) * 1500;
                const leftPos = 50 + (unidad.lng + addedLng + 79.20) * 1500;
                
@@ -84,7 +72,7 @@ export default function TrackingPage() {
                   <div 
                      key={unidad.id}
                      onClick={() => setActiveUnit(unidad.id)}
-                     className={`absolute w-12 h-12 -ml-6 -mt-6 flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-110 z-20 ${isSelected ? 'z-30' : ''}`}
+                     className={`absolute w-16 h-16 -ml-8 -mt-8 flex flex-col items-center justify-center cursor-pointer transition-all hover:scale-125 z-20 ${isSelected ? 'z-40' : ''}`}
                      style={{ 
                         top: `${topPos}%`, 
                         left: `${leftPos}%`, 
@@ -92,87 +80,96 @@ export default function TrackingPage() {
                         transitionTimingFunction: 'linear' 
                      }}
                   >
-                     <div className={`relative flex items-center justify-center transition-all duration-300 ${isSelected ? 'w-10 h-10' : 'w-8 h-8'}`}>
-                        {/* Ping animation para unidades en ruta */}
-                        {unidad.estado === 'en-ruta' && (
-                           <div className="absolute inset-0 bg-brand-500 rounded-full animate-ping opacity-75"></div>
-                        )}
+                     {/* Pulse aura for active units */}
+                     {unidad.estado === 'en-ruta' && (
+                        <div className="absolute inset-0 bg-andina-primary/20 rounded-full animate-ping opacity-40"></div>
+                     )}
+                     
+                     <div className={`relative flex items-center justify-center transition-all duration-500 ${isSelected ? 'scale-125' : 'scale-100'}`}>
                         <div 
-                           className={`relative z-10 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white transition-all duration-500
-                           ${unidad.estado === 'en-ruta' ? 'bg-brand-500 w-full h-full' : 
-                             unidad.estado === 'detenido' ? 'bg-warning w-full h-full' : 'bg-surface-400 w-full h-full'}`}
+                           className={`relative z-10 rounded-2xl border-2 border-white/20 shadow-[0_0_20px_rgba(0,0,0,0.5)] flex items-center justify-center text-white transition-all duration-700
+                           ${unidad.estado === 'en-ruta' ? 'bg-andina-primary w-10 h-10 shadow-andina-primary/40' : 
+                             unidad.estado === 'detenido' ? 'bg-andina-accent w-9 h-9 shadow-andina-accent/40' : 'bg-andina-surface w-9 h-9 border-white/5'}`}
                            style={{
-                              transform: `rotate(${unidad.estado === 'en-ruta' ? (Math.sin(tick + index) * 45) : 0}deg)`,
-                              transitionTimingFunction: 'linear'
+                              transform: `rotate(${unidad.estado === 'en-ruta' ? (Math.sin(tick + index) * 30) : 0}deg)`,
+                              transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
                            }}
                         >
-                           <Navigation size={isSelected ? 20 : 16} />
+                           <Navigation size={isSelected ? 22 : 18} className={unidad.estado === 'en-ruta' ? 'drop-shadow-lg' : 'opacity-60'} />
                         </div>
                      </div>
-                     {/* Etiqueta de la placa */}
-                     <div className={`mt-1 px-2 py-0.5 rounded text-xs font-bold shadow-sm border ${isSelected ? 'bg-surface-900 border-surface-900 text-white' : 'bg-white border-surface-200 text-surface-800'}`}>
+                     
+                     <div className={`mt-2 px-3 py-1 rounded-xl text-[10px] font-black shadow-2xl border backdrop-blur-md transition-all ${isSelected ? 'bg-andina-primary border-andina-primary text-white scale-110 shadow-andina-primary/30' : 'bg-andina-surface/90 border-white/10 text-andina-text'}`}>
                         {unidad.placa}
                      </div>
                   </div>
                )
             })}
          </div>
-         
 
-         {/* PANEL LATERAL DE CONTROL */}
-         <div className="absolute right-4 top-4 bottom-4 w-80 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-surface-200 overflow-hidden flex flex-col z-40">
-            <div className="p-4 border-b border-surface-200 bg-surface-50 flex justify-between items-center">
+         {/* PANEL DE CONTROL: Responsivo (Lateral en MD, Inferior en Movil) */}
+         <div className={`absolute transition-all duration-700 z-50 overflow-hidden
+            md:right-6 md:top-6 md:bottom-6 md:w-96 md:rounded-[2rem]
+            bottom-0 left-0 right-0 w-full rounded-t-[2.5rem]
+            bg-andina-surface/80 backdrop-blur-3xl border border-white/10 shadow-2xl flex flex-col
+            ${isPanelOpen ? 'md:translate-x-0 h-[60%] md:h-auto' : 'md:translate-x-[calc(100%+2rem)] h-20'}
+         `}>
+            <div className="p-6 border-b border-white/5 flex justify-between items-center cursor-pointer md:cursor-default" onClick={() => !window.matchMedia('(min-width: 768px)').matches && setIsPanelOpen(!isPanelOpen)}>
                <div>
-                  <h4 className="font-bold text-surface-900">Flota Operativa</h4>
-                  <p className="text-xs text-surface-500">{UNIDADES_GPS.length} unidades registradas</p>
+                  <h4 className="font-heading font-black text-white tracking-tighter text-lg">Flota Operativa</h4>
+                  <p className="text-[10px] text-andina-text/40 font-black uppercase tracking-widest">{UNIDADES_GPS.length} Terminales en Red</p>
                </div>
-               <div className="w-10 h-10 rounded-full bg-brand-100 flex items-center justify-center text-brand-600">
-                  <Navigation size={20} />
+               <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-2xl bg-andina-primary/10 text-andina-primary flex items-center justify-center border border-andina-primary/20">
+                     <Focus size={18} />
+                  </div>
+                  <button onClick={(e) => { e.stopPropagation(); setIsPanelOpen(!isPanelOpen); }} className="p-2 text-andina-text hover:text-white transition-all hidden md:block">
+                    <Maximize size={20} className={isPanelOpen ? 'rotate-180' : ''} />
+                  </button>
                </div>
             </div>
             
-            <div className="flex-1 overflow-y-auto p-3 space-y-3">
+            <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 custom-scrollbar">
                {UNIDADES_GPS.map(unidad => {
                   const isActive = activeUnit === unidad.id;
                   return (
                      <div 
                         key={unidad.id} 
                         onClick={() => setActiveUnit(unidad.id)}
-                        className={`p-4 rounded-xl border transition-all cursor-pointer ${isActive ? 'bg-brand-50 border-brand-300 shadow-sm' : 'bg-white border-surface-200 hover:border-brand-200 hover:bg-surface-50'}`}
+                        className={`p-5 rounded-3xl border transition-all cursor-pointer group relative overflow-hidden ${isActive ? 'bg-andina-primary/10 border-andina-primary/40 shadow-xl' : 'bg-white/5 border-white/5 hover:bg-white/10'}`}
                      >
-                        <div className="flex justify-between items-start mb-2">
-                           <div className="flex items-center gap-2">
-                              <span className="font-bold text-surface-900">{unidad.placa}</span>
-                              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md uppercase ${unidad.estado === 'en-ruta' ? 'bg-success text-white' : unidad.estado === 'detenido' ? 'bg-warning text-white' : 'bg-surface-200 text-surface-600'}`}>
-                                 {unidad.estado}
-                              </span>
+                        <div className="flex justify-between items-center mb-4">
+                           <div className="flex items-center gap-3">
+                              <span className="font-black text-white text-lg tracking-tighter">{unidad.placa}</span>
+                              <div className={`w-2.5 h-2.5 rounded-full ${unidad.estado === 'en-ruta' ? 'bg-andina-primary shadow-[0_0_10px_rgba(34,197,94,0.5)] animate-pulse' : unidad.estado === 'detenido' ? 'bg-andina-accent' : 'bg-white/20'}`}></div>
                            </div>
+                           <span className="text-[9px] font-black uppercase tracking-[0.2em] text-andina-text/40">{unidad.id}</span>
                         </div>
                         
-                        <div className="flex items-center gap-6 mt-3">
-                           <div>
-                              <p className="text-[10px] text-surface-400 font-semibold uppercase tracking-wider mb-0.5">Velocidad</p>
-                              <p className={`text-xl font-bold ${unidad.velocidad > 60 ? 'text-danger' : 'text-surface-900'}`}>{unidad.velocidad} <span className="text-xs font-normal text-surface-500">km/h</span></p>
+                        <div className="grid grid-cols-2 gap-4">
+                           <div className="bg-black/20 p-3 rounded-2xl border border-white/5">
+                              <p className="text-[9px] text-andina-text/40 font-black uppercase tracking-widest mb-1 font-mono">Velocidad</p>
+                              <p className={`text-2xl font-black tracking-tighter ${unidad.velocidad > 60 ? 'text-andina-accent' : 'text-white'}`}>{unidad.velocidad} <span className="text-[10px] font-bold text-andina-text/40 tracking-normal italic uppercase">km/h</span></p>
                            </div>
-                           <div>
-                              <p className="text-[10px] text-surface-400 font-semibold uppercase tracking-wider mb-0.5">Combustible</p>
-                              <div className="flex items-center gap-1.5 mt-1">
-                                 <div className="w-16 h-2 bg-surface-200 rounded-full overflow-hidden">
-                                    <div className={`h-full ${unidad.combustible < 20 ? 'bg-danger' : 'bg-brand-500'}`} style={{ width: `${unidad.combustible}%`}}></div>
+                           <div className="bg-black/20 p-3 rounded-2xl border border-white/5">
+                              <p className="text-[9px] text-andina-text/40 font-black uppercase tracking-widest mb-1 font-mono">Batería/Fuel</p>
+                              <div className="flex items-center gap-2 mt-1.5">
+                                 <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
+                                    <div className={`h-full transition-all duration-1000 ${unidad.combustible < 20 ? 'bg-andina-accent' : 'bg-andina-primary'}`} style={{ width: `${unidad.combustible}%`}}></div>
                                  </div>
-                                 <span className="text-xs font-bold text-surface-700">{unidad.combustible}%</span>
+                                 <span className="text-[10px] font-black text-white font-mono">{unidad.combustible}%</span>
                               </div>
                            </div>
                         </div>
 
                         {isActive && (
-                           <div className="mt-4 pt-3 border-t border-brand-200 flex items-center justify-between">
-                              <div className="flex items-center gap-1.5 text-xs text-surface-600">
-                                 <Clock size={14} />
-                                 Última señal: {unidad.ultimaAct}
+                           <div className="mt-5 pt-4 border-t border-white/5 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+                              <div className="flex items-center gap-2 text-[9px] text-andina-text/40 font-black uppercase tracking-widest">
+                                 <Clock size={12} className="text-andina-primary" />
+                                 Sinc: {unidad.ultimaAct}
                               </div>
-                              <button className="text-xs font-bold text-brand-700 hover:text-brand-800">
-                                 Ver Ruta Completa &rarr;
+                              <button className="text-[9px] font-black uppercase tracking-[0.2em] text-andina-primary hover:text-white transition-all bg-andina-primary/10 px-3 py-1.5 rounded-lg border border-andina-primary/20">
+                                 Historial Rutas &rarr;
                               </button>
                            </div>
                         )}
@@ -182,19 +179,19 @@ export default function TrackingPage() {
             </div>
          </div>
          
-         {/* Leyenda inferior */}
-         <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-3 rounded-lg border border-surface-200 shadow-xl flex items-center gap-6 z-40">
-            <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-brand-500 ring-2 ring-brand-200"></div>
-               <span className="text-xs font-medium text-surface-700">En Ruta</span>
+         {/* Leyenda Inferior Glass */}
+         <div className="hidden md:flex absolute bottom-6 left-6 bg-andina-surface/60 backdrop-blur-xl px-6 py-4 rounded-3xl border border-white/10 shadow-2xl items-center gap-8 z-40">
+            <div className="flex items-center gap-3">
+               <div className="w-3 h-3 rounded-full bg-andina-primary shadow-[0_0_12px_rgba(34,197,94,0.6)]"></div>
+               <span className="text-[10px] font-black uppercase tracking-widest text-andina-text">Operativo</span>
             </div>
-            <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-warning ring-2 ring-warning/30"></div>
-               <span className="text-xs font-medium text-surface-700">Detenido</span>
+            <div className="flex items-center gap-3">
+               <div className="w-3 h-3 rounded-full bg-andina-accent shadow-[0_0_12px_rgba(110,231,183,0.6)]"></div>
+               <span className="text-[10px] font-black uppercase tracking-widest text-andina-text">Inactivo</span>
             </div>
-            <div className="flex items-center gap-2">
-               <div className="w-3 h-3 rounded-full bg-surface-400 ring-2 ring-surface-200"></div>
-               <span className="text-xs font-medium text-surface-700">Fuera de Servicio</span>
+            <div className="flex items-center gap-3">
+               <div className="w-3 h-3 rounded-full bg-white/20"></div>
+               <span className="text-[10px] font-black uppercase tracking-widest text-andina-text">Desconectado</span>
             </div>
          </div>
 

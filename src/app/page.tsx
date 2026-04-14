@@ -84,17 +84,17 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6 }}
-              className="text-6xl md:text-9xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-8"
+              className="text-5xl md:text-9xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-8 drop-shadow-2xl"
             >
               LA FLOTA <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-andina-primary via-white to-andina-accent text-7xl md:text-8xl">MÁS GRANDE.</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-andina-primary via-white to-andina-accent text-6xl md:text-8xl">MÁS GRANDE.</span>
             </motion.h1>
 
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="text-xl md:text-2xl text-andina-text/60 leading-relaxed mb-12 max-w-2xl font-sans font-light"
+              className="text-lg md:text-2xl text-andina-text/80 leading-relaxed mb-12 max-w-2xl font-sans font-light drop-shadow-sm"
             >
               Al servicio de Loja, brindando seguridad, puntualidad y tecnología en cada ruta. Somos la fuerza de transporte más confiable de la región.
             </motion.p>
@@ -107,7 +107,7 @@ export default function HomePage() {
             >
               <Link 
                 href="/contacto"
-                className="group relative flex items-center justify-center gap-4 bg-andina-primary hover:bg-andina-primary/90 px-10 py-5 rounded-2xl text-lg font-bold text-white transition-all shadow-[0_0_40px_rgba(46,168,79,0.3)]"
+                className="group relative flex items-center justify-center gap-4 bg-andina-primary hover:bg-andina-primary/90 px-8 py-5 rounded-2xl text-lg font-bold text-white transition-all shadow-[0_0_40px_rgba(46,168,79,0.3)] w-full sm:w-auto"
               >
                 <span>Cotiza tu Ruta</span>
                 <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
@@ -117,16 +117,33 @@ export default function HomePage() {
                 href="https://www.facebook.com/share/p/178W1kZ95w/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group relative flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 px-10 py-5 rounded-2xl text-lg font-bold text-white transition-all border border-white/10 backdrop-blur-xl"
+                className="group relative flex items-center justify-center gap-4 bg-white/5 hover:bg-white/10 px-8 py-5 rounded-2xl text-lg font-bold text-white transition-all border border-white/10 backdrop-blur-xl w-full sm:w-auto"
               >
                 <span>Nuestro Nuevo Post</span>
                 <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
               </a>
             </motion.div>
+
+            {/* Mobile Side Badge Re-location (Visible only on mobile/tablet) */}
+            <div className="mt-12 xl:hidden grid grid-cols-2 sm:grid-cols-3 gap-4">
+               {[
+                { label: "Seguridad", val: "ANT 2026", icon: Shield },
+                { label: "Unidades", val: "74 BUSES", icon: Zap },
+                { label: "Cobertura", val: "TODO LOJA", icon: MapPin }
+              ].map(item => (
+                <div key={item.label} className="p-4 rounded-2xl bg-andina-surface/40 backdrop-blur-xl border border-white/5 flex flex-col gap-2">
+                  <item.icon className="text-andina-primary" size={18} />
+                  <div>
+                    <p className="text-[8px] text-andina-text/40 font-mono uppercase tracking-[0.2em]">{item.label}</p>
+                    <p className="text-xs font-bold text-white">{item.val}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Side Badge */}
+        {/* Side Badge (Desktop and larger only) */}
         <div className="absolute right-0 top-1/2 -translate-y-1/2 hidden xl:block z-20">
            <div className="p-10 border-l border-white/5 bg-andina-surface/40 backdrop-blur-2xl rounded-l-3xl space-y-8">
               {[
@@ -154,7 +171,7 @@ export default function HomePage() {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-andina-surface/60 backdrop-blur-3xl border border-white/10 rounded-3xl p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+          className="bg-andina-surface/60 backdrop-blur-3xl border border-white/10 rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-8 shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
         >
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 text-andina-primary">
@@ -165,10 +182,10 @@ export default function HomePage() {
               <h4 className="text-xl font-bold text-white uppercase tracking-tight">Socio Estratégico del Mes: ServiLoja</h4>
             </div>
           </div>
-          <p className="text-sm text-andina-text/40 max-w-md text-center md:text-left">
+          <p className="text-sm text-andina-text/60 max-w-md text-center md:text-left">
             Impulsa tu marca ante miles de usuarios diarios. Este banner genera ingresos directos para el Fondo de Mantenimiento de la flota.
           </p>
-          <Link href="/promociones" className="bg-white/5 hover:bg-white/10 px-8 py-3 rounded-xl border border-white/10 text-xs font-bold text-white transition-all whitespace-nowrap">
+          <Link href="/promociones" className="bg-white/5 hover:bg-white/10 px-8 py-4 rounded-xl border border-white/10 text-xs font-bold text-white transition-all whitespace-nowrap w-full md:w-auto text-center">
             Ver Convenios
           </Link>
         </motion.div>
@@ -182,7 +199,7 @@ export default function HomePage() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter uppercase mb-4 leading-none"
+              className="text-4xl md:text-5xl font-heading font-black text-white tracking-tighter uppercase mb-4 leading-none drop-shadow-lg"
             >
               NUESTROS <br />
               <span className="text-andina-primary">ALIADOS ESTRATÉGICOS</span>
@@ -201,7 +218,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className="relative h-[600px] w-full max-w-[1400px] mx-auto px-6 group">
+        <div className="relative h-[500px] md:h-[600px] w-full max-w-[1400px] mx-auto px-6 group">
           <AnimatePresence mode="wait">
              {currentSponsor && (
                <motion.div
@@ -218,14 +235,14 @@ export default function HomePage() {
                       <img 
                         src={currentSponsor.image} 
                         alt={currentSponsor.name} 
-                        className="w-full h-full object-cover grayscale-[0.2] brightness-[0.4] group-hover:scale-105 group-hover:brightness-[0.5] transition-all duration-[2s]" 
+                        className="w-full h-full object-cover grayscale-[0.2] brightness-[0.3] group-hover:scale-105 group-hover:brightness-[0.4] transition-all duration-[2s]" 
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-andina-bg via-transparent to-transparent opacity-80" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-andina-bg/80 via-transparent to-transparent opacity-60" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-andina-bg via-transparent to-transparent opacity-90" />
+                      <div className="absolute inset-0 bg-gradient-to-r from-andina-bg/90 via-transparent to-transparent opacity-70" />
                    </div>
 
                    {/* Content Overlay */}
-                   <div className="absolute inset-0 flex flex-col justify-end p-12 md:p-20">
+                   <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-20">
                       <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -235,13 +252,13 @@ export default function HomePage() {
                         <div className="inline-block px-4 py-1.5 rounded-full bg-andina-primary/20 backdrop-blur-md border border-andina-primary/30 text-andina-primary text-[10px] font-mono font-black uppercase tracking-[0.3em] mb-6">
                           Sponsor Autorizado
                         </div>
-                        <h3 className="text-5xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter mb-6 leading-none">
+                        <h3 className="text-4xl md:text-7xl font-heading font-black text-white uppercase tracking-tighter mb-6 leading-none drop-shadow-xl">
                           {currentSponsor.name}
                         </h3>
-                        <div className="flex items-center gap-8">
+                        <div className="flex flex-col sm:flex-row items-center gap-8">
                            <Link 
                               href={currentSponsor.link}
-                              className="group/btn flex items-center gap-4 bg-white text-black px-8 py-4 rounded-2xl font-black uppercase text-sm hover:bg-andina-primary hover:text-white transition-all shadow-2xl"
+                              className="group/btn flex items-center gap-4 bg-white text-black px-8 py-4 rounded-2xl font-black uppercase text-sm hover:bg-andina-primary hover:text-white transition-all shadow-2xl w-full sm:w-auto justify-center"
                            >
                               <span>Ver Beneficios</span>
                               <ArrowUpRight size={20} className="group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
@@ -279,7 +296,7 @@ export default function HomePage() {
       </section>
 
       {/* Trust & Magnitude Section */}
-      <section className="py-32 bg-andina-surface relative border-y border-andina-border">
+      <section className="py-24 md:py-32 bg-andina-surface relative border-y border-andina-border">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
@@ -305,13 +322,13 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="p-10 rounded-3xl bg-andina-bg border border-andina-border hover:border-andina-primary/30 transition-all group"
+                className="p-6 md:p-10 rounded-3xl bg-andina-bg border border-andina-border hover:border-andina-primary/30 transition-all group"
               >
                 <div className="w-16 h-16 bg-andina-surface rounded-2xl flex items-center justify-center mb-8 border border-andina-border group-hover:bg-andina-primary/10 group-hover:text-andina-primary transition-all">
                   <card.icon size={32} />
                 </div>
                 <h3 className="text-2xl font-bold text-white mb-4">{card.title}</h3>
-                <p className="text-andina-text/50 leading-relaxed">{card.desc}</p>
+                <p className="text-andina-text/60 leading-relaxed">{card.desc}</p>
               </motion.div>
             ))}
           </div>

@@ -9,118 +9,121 @@ export default function CobranzasPage() {
   const vencidos = PAGOS.filter(p => p.estado === "vencido").length;
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h2 className="text-2xl font-bold text-surface-900 tracking-tight">Control de Cobranzas</h2>
-          <p className="text-surface-500 text-sm mt-1">Gestión de pagos mensuales de padres de familia</p>
+          <h2 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter drop-shadow-lg">Gestión de <span className="text-andina-primary">Recaudación</span></h2>
+          <p className="text-andina-text/60 text-xs font-mono uppercase tracking-[0.2em] mt-1 font-bold">Seguimiento de pensiones y cartera vencida</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 bg-white border border-surface-200 px-4 py-2 rounded-lg text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors shadow-sm">
-            <Filter size={16} />
-            <span>Filtros</span>
+          <button className="flex items-center gap-2 bg-andina-surface border border-andina-border px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-andina-text hover:bg-white/5 transition-all shadow-xl">
+            <Filter size={16} className="text-andina-primary" /> Filtros
           </button>
-          <button className="flex items-center gap-2 bg-white border border-surface-200 px-4 py-2 rounded-lg text-sm font-medium text-surface-700 hover:bg-surface-50 transition-colors shadow-sm">
-            <Download size={16} />
-            <span>Exportar</span>
+          <button className="flex items-center gap-2 bg-andina-surface border border-andina-border px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-andina-text hover:bg-white/5 transition-all shadow-xl">
+            <Download size={16} className="text-andina-primary" /> Reporte
           </button>
         </div>
       </div>
 
-      {/* Summary Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white border text-center p-4 rounded-xl border-success/30 bg-success/5">
-          <p className="text-success text-sm font-semibold uppercase tracking-wider">Pagado (Abril)</p>
-          <p className="text-3xl font-bold text-surface-900 mt-1">{pagados}</p>
+      {/* Resumen de Recaudación: Premium Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="bg-andina-surface/40 backdrop-blur-xl border border-andina-primary/20 p-6 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+          <div className="absolute -right-4 -top-4 text-andina-primary/5 group-hover:scale-110 transition-transform duration-700">
+             <CheckCircle2 size={100} />
+          </div>
+          <p className="text-andina-primary text-[10px] font-black uppercase tracking-[0.2em] mb-1 font-mono">Recaudado (Abril)</p>
+          <p className="text-4xl font-black text-white tracking-tighter drop-shadow-md">{pagados} <span className="text-xs font-bold text-andina-text/40 tracking-normal">Alumnos</span></p>
         </div>
-        <div className="bg-white border text-center p-4 rounded-xl border-warning/30 bg-warning/5">
-          <p className="text-warning text-sm font-semibold uppercase tracking-wider">Pendiente (A tiempo)</p>
-          <p className="text-3xl font-bold text-surface-900 mt-1">{pendientes}</p>
+        
+        <div className="bg-andina-surface/40 backdrop-blur-xl border border-white/5 p-6 rounded-[2rem] shadow-2xl relative overflow-hidden group">
+          <p className="text-andina-text/60 text-[10px] font-black uppercase tracking-[0.2em] mb-1 font-mono">Pendientes de Pago</p>
+          <p className="text-4xl font-black text-white tracking-tighter drop-shadow-md">{pendientes} <span className="text-xs font-bold text-andina-text/40 tracking-normal">En Proceso</span></p>
         </div>
-        <div className="bg-white border text-center p-4 rounded-xl border-danger/30 bg-danger/5">
-          <p className="text-danger text-sm font-semibold uppercase tracking-wider">Vencido</p>
-          <p className="text-3xl font-bold text-surface-900 mt-1">{vencidos}</p>
+
+        <div className={`bg-andina-surface/40 backdrop-blur-xl border p-6 rounded-[2rem] shadow-2xl relative overflow-hidden group transition-all ${vencidos > 0 ? 'border-andina-accent/40 bg-andina-accent/5' : 'border-white/5'}`}>
+          <div className="absolute -right-4 -top-4 text-andina-accent/5 group-hover:scale-110 transition-transform duration-700">
+             <AlertCircle size={100} />
+          </div>
+          <p className={`${vencidos > 0 ? 'text-andina-accent' : 'text-andina-text/60'} text-[10px] font-black uppercase tracking-[0.2em] mb-1 font-mono`}>Cartera Vencida</p>
+          <p className="text-4xl font-black text-white tracking-tighter drop-shadow-md">{vencidos} <span className="text-xs font-bold text-andina-text/40 tracking-normal">Mora Crítica</span></p>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-surface-200 shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-surface-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-surface-400" />
+      <div className="bg-andina-surface/40 backdrop-blur-xl rounded-[2.5rem] border border-white/5 shadow-2xl overflow-hidden">
+        <div className="p-6 border-b border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="relative flex-1 max-w-md">
+            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-andina-primary" />
             <input
               type="text"
-              placeholder="Buscar estudiante o padre..."
-              className="w-full pl-9 pr-4 py-2 rounded-lg border border-surface-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 focus:border-brand-500 transition"
+              placeholder="Buscar estudiante, padre o placa..."
+              className="w-full pl-12 pr-6 py-4 rounded-2xl bg-black/20 border border-white/10 text-sm font-bold text-white focus:outline-none focus:border-andina-primary transition-all placeholder:text-white/10"
             />
           </div>
-          <div className="flex gap-2">
-            <select className="px-3 py-2 border border-surface-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/30 text-surface-700">
-               <option>Mes: Abril 2026</option>
-               <option>Mes: Marzo 2026</option>
-            </select>
-          </div>
+          <select className="px-6 py-4 bg-andina-surface border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white focus:outline-none focus:border-andina-primary cursor-pointer transition-all">
+             <option>Período: Abril 2026</option>
+             <option>Período: Marzo 2026</option>
+          </select>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap">
-            <thead className="bg-surface-50 text-surface-500 font-medium border-b border-surface-200">
+        {/* Desktop View: Editorial Table */}
+        <div className="hidden lg:block overflow-x-auto">
+          <table className="w-full text-left text-sm">
+            <thead className="bg-white/5 text-andina-text/40 font-black uppercase tracking-widest text-[9px] border-b border-white/10">
               <tr>
-                <th className="px-6 py-3">Estudiante / Padre</th>
-                <th className="px-6 py-3">Unidad</th>
-                <th className="px-6 py-3">Monto</th>
-                <th className="px-6 py-3">Estado</th>
-                <th className="px-6 py-3">Fecha/Método</th>
-                <th className="px-6 py-3 relative">Acciones</th>
+                <th className="px-8 py-5">Estudiante / Representante</th>
+                <th className="px-8 py-5">Unidad</th>
+                <th className="px-8 py-5">Monto</th>
+                <th className="px-8 py-5">Estado</th>
+                <th className="px-8 py-5">Transacción</th>
+                <th className="px-8 py-5 text-right">Notificación</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-surface-100">
+            <tbody className="divide-y divide-white/5">
               {PAGOS.map((pago) => (
-                <tr key={pago.id} className="hover:bg-surface-50/50 transition-colors">
-                  <td className="px-6 py-4">
+                <tr key={pago.id} className="hover:bg-white/5 transition-all group">
+                  <td className="px-8 py-6">
                     <div className="flex flex-col">
-                      <span className="font-semibold text-surface-900">{pago.estudiante}</span>
-                      <span className="text-[13px] text-surface-500">Rep: {pago.padre}</span>
+                      <span className="font-black text-white text-base tracking-tight">{pago.estudiante}</span>
+                      <span className="text-[10px] font-bold text-andina-text/40 uppercase tracking-widest mt-1">Padre: {pago.padre}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-surface-700">
-                    {pago.socioId.replace("S00", "U-0")}
+                  <td className="px-8 py-6">
+                    <span className="bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg text-[10px] font-black text-andina-text/60 font-mono">
+                      {pago.socioId.replace("S00", "U-0")}
+                    </span>
                   </td>
-                  <td className="px-6 py-4 font-medium text-surface-900">
-                    ${pago.monto.toFixed(2)}
+                  <td className="px-8 py-6">
+                    <span className="text-lg font-black text-white tracking-tighter">${pago.monto.toFixed(2)}</span>
                   </td>
-                  <td className="px-6 py-4">
-                    <select 
-                      className={`text-xs font-bold px-3 py-1.5 rounded-full border outline-none appearance-none cursor-pointer focus:ring-2 focus:ring-brand-500/30 ${
-                        pago.estado === "pagado" ? "bg-success/10 text-success border-success/20" : 
-                        pago.estado === "pendiente" ? "bg-warning/10 text-warning border-warning/20" :
-                        "bg-danger/10 text-danger border-danger/20"
-                      }`}
-                      defaultValue={pago.estado}
-                    >
-                      <option value="pagado">Pagado</option>
-                      <option value="pendiente">Pendiente</option>
-                      <option value="vencido">Vencido</option>
-                    </select>
+                  <td className="px-8 py-6">
+                    <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-xl border text-[9px] font-black uppercase tracking-widest shadow-lg ${
+                        pago.estado === "pagado" ? "bg-andina-primary/10 text-andina-primary border-andina-primary/20" : 
+                        pago.estado === "pendiente" ? "bg-white/5 text-andina-text/60 border-white/10" :
+                        "bg-andina-accent/10 text-andina-accent border-andina-accent/20"
+                      }`}>
+                      <div className={`w-1.5 h-1.5 rounded-full ${pago.estado === "pagado" ? 'bg-andina-primary' : pago.estado === 'pendiente' ? 'bg-white/40' : 'bg-andina-accent'}`}></div>
+                      {pago.estado}
+                    </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6">
                     {pago.fechaPago ? (
                       <div className="flex flex-col">
-                        <span className="text-surface-900">{pago.fechaPago}</span>
-                        <span className="text-[12px] text-surface-500">{pago.metodo}</span>
+                        <span className="text-white font-bold">{pago.fechaPago}</span>
+                        <span className="text-[9px] text-andina-text/40 font-black uppercase tracking-widest mt-0.5">{pago.metodo}</span>
                       </div>
                     ) : (
-                      <span className="text-surface-400 italic">-</span>
+                      <span className="text-andina-text/20 italic font-mono text-xs">Pérdida de señal...</span>
                     )}
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6 text-right">
                     {pago.estado !== "pagado" ? (
-                      <button className="flex items-center gap-1.5 text-xs font-bold bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 border border-[#25D366]/30 px-3 py-1.5 rounded transition-colors shadow-sm">
+                      <button className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-widest bg-[#25D366]/10 text-[#25D366] hover:bg-[#25D366]/20 border border-[#25D366]/30 px-4 py-2 rounded-xl transition-all active:scale-95 shadow-lg shadow-[#25D366]/10">
                         <MessageCircle size={14} />
-                        Notificar WhatsApp
+                        Recordatorio
                       </button>
                     ) : (
-                       <button className="p-1.5 text-surface-400 hover:text-surface-700 hover:bg-surface-200 rounded transition-colors">
-                        <MoreHorizontal size={16} />
+                       <button className="p-2 text-andina-text/40 hover:text-white transition-all">
+                        <MoreHorizontal size={20} />
                       </button>
                     )}
                   </td>
@@ -128,6 +131,39 @@ export default function CobranzasPage() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile View: Cards Stack */}
+        <div className="lg:hidden p-4 space-y-4">
+           {PAGOS.map((pago) => (
+             <div key={pago.id} className="bg-white/5 border border-white/5 rounded-3xl p-6 relative overflow-hidden active:scale-[0.98] transition-transform">
+                <div className="flex justify-between items-start mb-6">
+                   <div>
+                      <h4 className="text-lg font-black text-white tracking-tight">{pago.estudiante}</h4>
+                      <p className="text-[10px] font-black text-andina-text/40 uppercase tracking-widest mt-1">Unidad {pago.socioId.replace("S00", "U-0")}</p>
+                   </div>
+                   <div className={`px-4 py-1.5 rounded-xl border text-[9px] font-black uppercase tracking-widest ${
+                      pago.estado === "pagado" ? "bg-andina-primary/10 text-andina-primary border-andina-primary/20" : 
+                      pago.estado === "pendiente" ? "bg-white/5 text-andina-text/60 border-white/10" :
+                      "bg-andina-accent/10 text-andina-accent border-andina-accent/20"
+                   }`}>
+                      {pago.estado}
+                   </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                   <div>
+                      <p className="text-[10px] text-andina-text/40 font-black uppercase tracking-widest mb-1">Monto Pensión</p>
+                      <p className="text-2xl font-black text-white tracking-tighter">${pago.monto.toFixed(2)}</p>
+                   </div>
+                   {pago.estado !== "pagado" && (
+                      <button className="flex items-center gap-2 text-[9px] font-black uppercase tracking-widest bg-[#25D366] text-white px-5 py-3 rounded-2xl shadow-xl shadow-[#25D366]/20 active:scale-95 transition-all">
+                        <MessageCircle size={16} /> WhatsApp
+                      </button>
+                   )}
+                </div>
+             </div>
+           ))}
         </div>
       </div>
     </div>

@@ -21,6 +21,8 @@ interface ModuleContextType {
   toggleModule: (href: string) => void;
   isModuleVisible: (href: string) => boolean;
   updateSettings: (newSettings: Partial<ConfigSettings>) => void;
+  isMobileOpen: boolean;
+  setIsMobileOpen: (open: boolean) => void;
 }
 
 const ModuleContext = createContext<ModuleContextType | undefined>(undefined);
@@ -51,6 +53,7 @@ export const ModuleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [visibility, setVisibility] = useState<VisibilityMap>(DEFAULT_VISIBILITY);
   const [settings, setSettings] = useState<ConfigSettings>(DEFAULT_SETTINGS);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
     const savedVisibility = localStorage.getItem('module_visibility');
@@ -92,7 +95,15 @@ export const ModuleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   };
 
   return (
-    <ModuleContext.Provider value={{ visibility, settings, toggleModule, isModuleVisible, updateSettings }}>
+    <ModuleContext.Provider value={{ 
+      visibility, 
+      settings, 
+      toggleModule, 
+      isModuleVisible, 
+      updateSettings,
+      isMobileOpen,
+      setIsMobileOpen
+    }}>
       {children}
     </ModuleContext.Provider>
   );

@@ -28,50 +28,50 @@ export function Footer() {
                 Podocarpus
               </span>
             </Link>
-            <p className="text-andina-text/50 text-sm leading-relaxed max-w-xs font-mono">
+            <p className="text-andina-text/80 text-sm leading-relaxed max-w-xs font-medium">
               Liderazgo en movilidad segura en el sur del Ecuador. La flota más grande de Loja con 74 unidades al servicio de su tranquilidad.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-andina-text/60 hover:bg-andina-primary hover:text-white transition-all"><FacebookIcon size={16} /></a>
-              <a href="#" className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-andina-text/60 hover:bg-andina-primary hover:text-white transition-all"><InstagramIcon size={16} /></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-andina-primary hover:text-white transition-all border border-white/5"><FacebookIcon size={18} /></a>
+              <a href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-andina-primary hover:text-white transition-all border border-white/5"><InstagramIcon size={18} /></a>
             </div>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6">Navegación</h4>
-            <ul className="space-y-4 text-sm font-mono uppercase tracking-wider">
-              <li><Link href="/" className="text-andina-text/40 hover:text-andina-primary transition-colors">Inicio</Link></li>
-              <li><Link href="/servicios" className="text-andina-text/40 hover:text-andina-primary transition-colors">Servicios</Link></li>
-              <li><Link href="/promociones" className="text-andina-text/40 hover:text-andina-primary transition-colors">Promociones</Link></li>
-              <li><Link href="/contacto" className="text-andina-text/40 hover:text-andina-primary transition-colors">Contacto</Link></li>
+            <h4 className="text-white font-black uppercase tracking-tighter mb-6">Navegación</h4>
+            <ul className="space-y-4 text-sm font-mono uppercase tracking-wider font-bold">
+              <li><Link href="/" className="text-andina-text/60 hover:text-andina-primary transition-colors">Inicio</Link></li>
+              <li><Link href="/servicios" className="text-andina-text/60 hover:text-andina-primary transition-colors">Servicios</Link></li>
+              <li><Link href="/promociones" className="text-andina-text/60 hover:text-andina-primary transition-colors">Promociones</Link></li>
+              <li><Link href="/contacto" className="text-andina-text/60 hover:text-andina-primary transition-colors">Contacto</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6">Soporte</h4>
-            <ul className="space-y-4 text-sm font-mono uppercase tracking-wider">
-              <li><Link href="/portal-info" className="text-andina-text/40 hover:text-andina-primary transition-colors">Portal Socio</Link></li>
-              <li><a href="#" className="text-andina-text/40 hover:text-andina-primary transition-colors">Términos Legales</a></li>
-              <li><a href="#" className="text-andina-text/40 hover:text-andina-primary transition-colors">Seguridad</a></li>
+            <h4 className="text-white font-black uppercase tracking-tighter mb-6">Soporte</h4>
+            <ul className="space-y-4 text-sm font-mono uppercase tracking-wider font-bold">
+              <li><Link href="/portal-info" className="text-andina-text/60 hover:text-andina-primary transition-colors">Portal Socio</Link></li>
+              <li><a href="#" className="text-andina-text/60 hover:text-andina-primary transition-colors">Términos Legales</a></li>
+              <li><a href="#" className="text-andina-text/60 hover:text-andina-primary transition-colors">Seguridad</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-bold mb-6">Contacto Directo</h4>
-            <ul className="space-y-4 text-sm text-andina-text/50">
-              <li className="flex gap-3"><MapPin size={18} className="text-andina-primary" /> Loja, Ecuador</li>
-              <li className="flex gap-3"><Phone size={18} className="text-andina-primary" /> +593 7 2XXXXXX</li>
-              <li className="flex gap-3"><Mail size={18} className="text-andina-primary" /> gerencia@podocarpus.com</li>
+            <h4 className="text-white font-black uppercase tracking-tighter mb-6">Contacto Directo</h4>
+            <ul className="space-y-4 text-sm text-andina-text/80 font-medium">
+              <li className="flex gap-3 items-center"><MapPin size={18} className="text-andina-primary" /> Loja, Ecuador</li>
+              <li className="flex gap-3 items-center"><Phone size={18} className="text-andina-primary" /> +593 7 2XXXXXX</li>
+              <li className="flex gap-3 items-center"><Mail size={18} className="text-andina-primary" /> gerencia@podocarpus.com</li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-xs text-andina-text/30 font-mono tracking-widest uppercase">
+          <p className="text-[10px] text-andina-text/50 font-mono tracking-widest uppercase font-bold text-center md:text-left">
             © 2026 Cooperativa de Transportes Podocarpus. Autoridad Andina.
           </p>
-          <div className="flex items-center gap-2 text-[10px] text-andina-text/20 font-mono uppercase tracking-tighter">
-            <ShieldCheck size={12} className="text-andina-primary/50" />
+          <div className="flex items-center gap-2 text-[10px] text-andina-text/60 font-mono uppercase tracking-tighter font-black bg-white/5 px-4 py-2 rounded-full border border-white/5 shadow-2xl">
+            <ShieldCheck size={14} className="text-andina-primary" />
             Certificado de Seguridad ANT 2026
           </div>
         </div>
