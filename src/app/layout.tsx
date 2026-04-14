@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { SplashScreen } from "@/components/SplashScreen";
+import { ChatAssistant } from "@/components/ChatAssistant";
+import { ModuleProvider } from "@/context/module-context";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -34,8 +36,11 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${dmSans.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-[#0D1117] text-[#E6EDF3] font-sans selection:bg-[#2EA84F]/30 selection:text-white">
-        <SplashScreen />
-        {children}
+        <ModuleProvider>
+          <SplashScreen />
+          {children}
+          <ChatAssistant />
+        </ModuleProvider>
       </body>
     </html>
   );

@@ -3,10 +3,10 @@
 import { useModuleContext } from "@/context/module-context";
 import { NAV_COOPERATIVA, NAV_SOCIO } from "@/lib/navigation";
 import { motion } from "framer-motion";
-import { Settings, Eye, EyeOff, Info } from "lucide-react";
+import { Settings, Eye, EyeOff, Info, Bot, Phone, Globe, Link as LinkIcon, Key } from "lucide-react";
 
 export default function ConfiguracionPage() {
-  const { visibility, toggleModule } = useModuleContext();
+  const { visibility, toggleModule, settings, updateSettings } = useModuleContext();
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -109,6 +109,106 @@ export default function ConfiguracionPage() {
           );
         })}
       </motion.div>
+      {/* AI Assistant & Notifications Settings */}
+      <div className="pt-8 border-t border-andina-border">
+        <h2 className="text-2xl font-heading font-bold text-andina-text tracking-tight flex items-center gap-3 mb-6">
+          <Bot className="text-andina-accent" />
+          Asistente IA & Notificaciones
+        </h2>
+        
+        <div className="space-y-6 bg-andina-surface/20 p-8 rounded-3xl border border-andina-border">
+          {/* AI Toggle */}
+          <div className="flex items-center justify-between p-4 bg-andina-surface/40 rounded-2xl border border-andina-border">
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-xl bg-andina-accent/10 text-andina-accent">
+                <Bot size={24} />
+              </div>
+              <div>
+                <h4 className="font-bold text-andina-text">Chatbot Inteligente</h4>
+                <p className="text-xs text-andina-text/50">Habilitar el asistente virtual en sitio web y CRM</p>
+              </div>
+            </div>
+            <button
+              onClick={() => updateSettings({ aiEnabled: !settings.aiEnabled })}
+              className={`relative w-12 h-6 rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-andina-accent/50
+                ${settings.aiEnabled ? "bg-andina-accent" : "bg-white/10"}`}
+            >
+              <motion.div
+                animate={{ x: settings.aiEnabled ? 26 : 2 }}
+                className="absolute top-1 left-0 w-4 h-4 rounded-full bg-white shadow-sm"
+              />
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <label className="text-xs font-mono uppercase tracking-widest text-andina-text/50">WhatsApp de Notificación</label>
+              <div className="relative group">
+                <Phone className="absolute left-4 top-1/2 -translate-y-1/2 text-andina-text/30 group-focus-within:text-andina-accent transition-colors" size={18} />
+                <input 
+                  type="text" 
+                  value={settings.notificationNumbers}
+                  onChange={(e) => updateSettings({ notificationNumbers: e.target.value })}
+                  placeholder="Ej: 593987654321, 592..."
+                  className="w-full bg-andina-bg border border-andina-border rounded-xl py-3 pl-12 pr-4 text-sm focus:border-andina-accent focus:ring-1 focus:ring-andina-accent/20 outline-none transition-all"
+                />
+              </div>
+              <p className="text-[10px] text-andina-text/30 italic">Separe múltiples números por coma (formato internacional)</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-xs font-mono uppercase tracking-widest text-andina-text/50">Instancia Evolution API</label>
+              <div className="relative group">
+                <Globe className="absolute left-4 top-1/2 -translate-y-1/2 text-andina-text/30 group-focus-within:text-andina-accent transition-colors" size={18} />
+                <input 
+                  type="text" 
+                  value={settings.evolutionInstance}
+                  onChange={(e) => updateSettings({ evolutionInstance: e.target.value })}
+                  placeholder="Nombre de la instancia..."
+                  className="w-full bg-andina-bg border border-andina-border rounded-xl py-3 pl-12 pr-4 text-sm focus:border-andina-accent focus:ring-1 focus:ring-andina-accent/20 outline-none transition-all"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-widest text-andina-text/50">URL del Servidor Evolution</label>
+            <div className="relative group">
+              <LinkIcon className="absolute left-4 top-1/2 -translate-y-1/2 text-andina-text/30 group-focus-within:text-andina-accent transition-colors" size={18} />
+              <input 
+                type="text" 
+                value={settings.evolutionApiUrl}
+                onChange={(e) => updateSettings({ evolutionApiUrl: e.target.value })}
+                placeholder="https://api.tudominio.com"
+                className="w-full bg-andina-bg border border-andina-border rounded-xl py-3 pl-12 pr-4 text-sm focus:border-andina-accent focus:ring-1 focus:ring-andina-accent/20 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-widest text-andina-text/50">API Key de Evolution</label>
+            <div className="relative group">
+              <Key className="absolute left-4 top-1/2 -translate-y-1/2 text-andina-text/30 group-focus-within:text-andina-accent transition-colors" size={18} />
+              <input 
+                type="password" 
+                value={settings.evolutionApiKey}
+                onChange={(e) => updateSettings({ evolutionApiKey: e.target.value })}
+                placeholder="••••••••••••••••"
+                className="w-full bg-andina-bg border border-andina-border rounded-xl py-3 pl-12 pr-4 text-sm focus:border-andina-accent focus:ring-1 focus:ring-andina-accent/20 outline-none transition-all"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-mono uppercase tracking-widest text-andina-text/50">Mensaje de Bienvenida IA</label>
+            <textarea 
+              value={settings.welcomeMessage}
+              onChange={(e) => updateSettings({ welcomeMessage: e.target.value })}
+              className="w-full bg-andina-bg border border-andina-border rounded-xl py-3 px-4 text-sm focus:border-andina-accent focus:ring-1 focus:ring-andina-accent/20 outline-none transition-all min-h-[80px]"
+            />
+          </div>
+        </div>
+      </div>
 
       <div className="pt-8 border-t border-andina-border flex justify-between items-center text-andina-text/30 font-mono text-[10px] uppercase tracking-[0.2em]">
         <span>Cooperativa Podocarpus • v1.0.4</span>
