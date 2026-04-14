@@ -36,6 +36,12 @@ export default function PromocionesPage() {
   }, []);
 
   if (loading) return <div className="min-h-screen bg-andina-bg" />;
+  
+  const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   return (
     <main className="min-h-screen bg-andina-bg font-sans selection:bg-andina-primary/30">
@@ -49,16 +55,44 @@ export default function PromocionesPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-andina-bg via-transparent to-andina-bg z-10" />
           
           <AnimatePresence mode="wait">
-            <motion.img 
+            <motion.div
               key={ad.mediaUrl}
               initial={{ scale: 1.1, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 1.5, ease: "easeOut" }}
-              src={ad.mediaUrl}
-              alt="Billboard Ad"
-              className="w-full h-full object-cover"
-            />
+              className="w-full h-full"
+            >
+              {ad.mediaUrl ? (
+                ad.mediaUrl.includes('youtube.com') || ad.mediaUrl.includes('youtu.be') ? (
+                  <div className="w-full h-full pointer-events-none scale-150">
+                    <iframe 
+                      src={`https://www.youtube.com/embed/${getYouTubeId(ad.mediaUrl)}?autoplay=1&mute=1&controls=0&loop=1&playlist=${getYouTubeId(ad.mediaUrl)}`}
+                      className="w-full h-full"
+                      frameBorder="0"
+                      allow="autoplay; encrypted-media"
+                    />
+                  </div>
+                ) : ad.mediaUrl.endsWith('.mp4') ? (
+                  <video 
+                    src={ad.mediaUrl} 
+                    autoPlay 
+                    muted 
+                    loop 
+                    playsInline 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <img 
+                    src={ad.mediaUrl} 
+                    alt="Billboard Ad"
+                    className="w-full h-full object-cover"
+                  />
+                )
+              ) : (
+                <div className="w-full h-full bg-andina-bg" />
+              )}
+            </motion.div>
           </AnimatePresence>
         </div>
 

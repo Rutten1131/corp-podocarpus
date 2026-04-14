@@ -4,14 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Monitor, Image as ImageIcon, Link as LinkIcon, Save, Eye, Smartphone, Tv, Zap, Layout, X, Check } from "lucide-react";
 import { useState, useEffect } from "react";
 
-// Mock de imágenes premium para la galería
+// Mock de imágenes y videos premium para la galería
 const PREMIUM_GALLERY = [
-  "/hero-buseta.png",
-  "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1562619371-b67725b6fde2?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1494515843206-f3117d3f51b7?auto=format&fit=crop&q=80&w=2000",
-  "https://images.unsplash.com/photo-1557223562-6c77ef16210f?auto=format&fit=crop&q=80&w=2000"
+  { type: "image", url: "/hero-buseta.png" },
+  { type: "video", url: "https://videos.pexels.com/video-files/5536120/5536120-uhd_2560_1440_25fps.mp4" }, // Bus/Road video
+  { type: "video", url: "https://videos.pexels.com/video-files/3831776/3831776-uhd_2560_1440_30fps.mp4" }, // Mountain road
+  { type: "image", url: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80&w=2000" },
+  { type: "image", url: "https://images.unsplash.com/photo-1570125909232-eb263c188f7e?auto=format&fit=crop&q=80&w=2000" },
+  { type: "image", url: "https://images.unsplash.com/photo-1562619371-b67725b6fde2?auto=format&fit=crop&q=80&w=2000" }
 ];
 
 export default function PublicidadPage() {
@@ -20,7 +20,8 @@ export default function PublicidadPage() {
     subheading: "Tu seguridad es nuestra mayor inversión. 74 busetas listas para llevarte a tu destino.",
     cta: "Viaja con Nosotros",
     link: "/contacto",
-    mediaUrl: PREMIUM_GALLERY[0]
+    mediaUrl: PREMIUM_GALLERY[0].url,
+    mediaType: "image" as "image" | "video"
   });
 
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -34,6 +35,12 @@ export default function PublicidadPage() {
       setAdState(JSON.parse(saved));
     }
   }, []);
+
+  const getYouTubeId = (url: string) => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
 
   const handleSave = () => {
     setIsSaving(true);
@@ -101,10 +108,24 @@ export default function PublicidadPage() {
                 <div>
                   <label className="block text-[10px] text-andina-text/40 font-mono uppercase tracking-widest mb-2">Texto Secundario</label>
                   <textarea 
-                    rows={4}
+                    rows={2}
                     value={adState.subheading}
                     onChange={(e) => setAdState({...adState, subheading: e.target.value})}
                     className="w-full bg-andina-bg border border-andina-border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-andina-primary/50 transition-all text-sm leading-relaxed"
+                  />
+                </div>
+                <div>
+                   <label className="block text-[10px] text-andina-text/40 font-mono uppercase tracking-widest mb-2">URL del Multimedia (Imagen, MP4 o YouTube)</label>
+                   <input 
+                    type="text" 
+                    value={adState.mediaUrl}
+                    onChange={(e) => {
+                      const url = e.target.value;
+                      const isVideo = url.includes('.mp4') || url.includes('youtube.com') || url.includes('youtu.be');
+                      setAdState({...adState, mediaUrl: url, mediaType: isVideo ? 'video' : 'image'});
+                    }}
+                    placeholder="Pega aquí tu enlace de Youtube o imagen..."
+                    className="w-full bg-andina-bg border border-andina-border rounded-xl px-4 py-3 text-white focus:outline-none focus:ring-1 focus:ring-andina-primary/50 transition-all text-xs font-mono"
                   />
                 </div>
               </div>
@@ -116,10 +137,18 @@ export default function PublicidadPage() {
                     onClick={() => setIsGalleryOpen(true)}
                     className="aspect-video bg-andina-bg border-2 border-dashed border-andina-border rounded-xl relative overflow-hidden group hover:border-andina-primary/50 transition-all cursor-pointer"
                    >
-                     <img src={adState.mediaUrl} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                     {adState.mediaUrl ? (
+                       adState.mediaType === "video" ? (
+                         <video src={adState.mediaUrl} muted loop autoPlay className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                       ) : (
+                         <img src={adState.mediaUrl} className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 transition-opacity" />
+                       )
+                     ) : (
+                       <div className="absolute inset-0 bg-andina-bg flex items-center justify-center text-andina-text/10 uppercase font-mono text-[10px]">Sin Multimedia</div>
+                     )}
                      <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-white/50 group-hover:text-white transition-colors">
-                        <ImageIcon size={32} />
-                        <span className="text-[10px] font-bold">Cambiar Imagen</span>
+                        {adState.mediaType === "video" ? <Tv size={32} /> : <ImageIcon size={32} />}
+                        <span className="text-[10px] font-bold">Cambiar Multimedia</span>
                      </div>
                    </div>
                 </div>
@@ -163,7 +192,24 @@ export default function PublicidadPage() {
              <div className="relative h-full flex flex-col items-center justify-center text-center space-y-6 animate-in fade-in zoom-in duration-500">
                 <div className="absolute inset-0 z-0 opacity-40">
                    <div className="absolute inset-0 bg-gradient-to-t from-andina-bg to-transparent" />
-                   <img src={adState.mediaUrl} className="w-full h-full object-cover rounded-2xl" />
+                   {adState.mediaUrl && (
+                     adState.mediaType === "video" ? (
+                        adState.mediaUrl.includes('youtube.com') || adState.mediaUrl.includes('youtu.be') ? (
+                          <div className="w-full h-full pointer-events-none scale-150">
+                             <iframe 
+                               src={`https://www.youtube.com/embed/${getYouTubeId(adState.mediaUrl)}?autoplay=1&mute=1&controls=0&loop=1&playlist=${getYouTubeId(adState.mediaUrl)}`}
+                               className="w-full h-full"
+                               frameBorder="0"
+                               allow="autoplay; encrypted-media"
+                             />
+                          </div>
+                        ) : (
+                          <video src={adState.mediaUrl} muted loop autoPlay className="w-full h-full object-cover rounded-2xl" />
+                        )
+                     ) : (
+                       <img src={adState.mediaUrl} className="w-full h-full object-cover rounded-2xl" />
+                     )
+                   )}
                 </div>
                 <div className="relative z-10 p-6">
                    <h2 className="text-3xl font-heading font-black text-white leading-tight mb-4">{adState.heading}</h2>
@@ -201,16 +247,23 @@ export default function PublicidadPage() {
               </div>
               
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-6">
-                {PREMIUM_GALLERY.map((img) => (
+                {PREMIUM_GALLERY.map((item, idx) => (
                   <div 
-                    key={img}
+                    key={idx}
                     onClick={() => {
-                      setAdState({...adState, mediaUrl: img});
+                      setAdState({...adState, mediaUrl: item.url, mediaType: item.type as any});
                       setIsGalleryOpen(false);
                     }}
-                    className={`aspect-video rounded-2xl overflow-hidden cursor-pointer border-2 transition-all group ${adState.mediaUrl === img ? 'border-andina-primary' : 'border-transparent'}`}
+                    className={`aspect-video rounded-2xl overflow-hidden cursor-pointer border-2 transition-all group relative ${adState.mediaUrl === item.url ? 'border-andina-primary' : 'border-transparent'}`}
                   >
-                    <img src={img} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    {item.type === "video" ? (
+                      <video src={item.url} muted className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    ) : (
+                      <img src={item.url} className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                    )}
+                    <div className="absolute top-2 right-2 bg-black/50 backdrop-blur-md px-2 py-1 rounded-md text-[8px] font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity uppercase">
+                       {item.type}
+                    </div>
                   </div>
                 ))}
               </div>
