@@ -2,12 +2,13 @@
 
 import { SOCIOS } from "@/lib/mock-data";
 import { Search, Plus, Filter, MoreVertical, ShieldAlert, CheckCircle2, X, ArrowLeft } from "lucide-react";
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-export default function SociosPage() {
+function SociosPageContent() {
+  const [selectedSocio, setSelectedSocio] = useState<any>(null);
   const searchParams = useSearchParams();
   const role = searchParams.get('role') || 'socio';
 
@@ -236,5 +237,17 @@ export default function SociosPage() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+export default function SociosPage() {
+  return (
+    <Suspense fallback={
+       <div className="h-96 flex items-center justify-center">
+          <div className="w-12 h-12 border-4 border-andina-primary/20 border-t-andina-primary rounded-full animate-spin"></div>
+       </div>
+    }>
+      <SociosPageContent />
+    </Suspense>
   );
 }
