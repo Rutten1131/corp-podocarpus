@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, Zap, Share2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { SponsorsSlider } from "@/components/SponsorsSlider";
+
 
 const DEFAULT_AD = {
   heading: "LOJA AL SIGUIENTE NIVEL",
@@ -23,7 +25,14 @@ export default function PromocionesPage() {
     const syncAd = () => {
       const saved = localStorage.getItem("podocarpus_active_ad");
       if (saved) {
-        setAd(JSON.parse(saved));
+        try {
+          const parsed = JSON.parse(saved);
+          if (parsed && typeof parsed === 'object') {
+            setAd(prev => ({ ...prev, ...parsed }));
+          }
+        } catch (e) {
+          console.error("Error syncing ad", e);
+        }
       }
       setLoading(false);
     };
@@ -63,7 +72,7 @@ export default function PromocionesPage() {
               transition={{ duration: 1.5, ease: "easeOut" }}
               className="w-full h-full"
             >
-              {ad.mediaUrl ? (
+              {ad?.mediaUrl ? (
                 ad.mediaUrl.includes('youtube.com') || ad.mediaUrl.includes('youtu.be') ? (
                   <div className="w-full h-full pointer-events-none scale-150">
                     <iframe 
@@ -111,26 +120,26 @@ export default function PromocionesPage() {
 
             <AnimatePresence mode="wait">
               <motion.div
-                key={ad.heading}
+                key={ad?.heading || "default"}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -30 }}
                 transition={{ duration: 0.5 }}
               >
                 <h1 className="text-4xl md:text-8xl font-heading font-black text-white leading-[0.9] tracking-tighter mb-8 max-w-4xl drop-shadow-[0_10px_30px_rgba(0,0,0,0.8)]">
-                  {ad.heading}
+                  {ad?.heading || "Cargando..."}
                 </h1>
 
                 <p className="text-lg md:text-2xl text-andina-text/90 leading-relaxed mb-12 max-w-2xl font-light mx-auto md:mx-0 drop-shadow-lg">
-                  {ad.subheading}
+                  {ad?.subheading || ""}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-5 items-center justify-center md:justify-start">
                   <Link 
-                    href={ad.link}
+                    href={ad?.link || "/contacto"}
                     className="group relative flex items-center justify-center gap-4 bg-andina-primary hover:bg-andina-primary/90 px-8 py-5 rounded-2xl text-lg font-bold text-white transition-all shadow-[0_0_40px_rgba(46,168,79,0.3)] w-full sm:w-auto"
                   >
-                    <span>{ad.cta}</span>
+                    <span>{ad?.cta || "Ver más"}</span>
                     <ChevronRight size={22} className="group-hover:translate-x-1 transition-transform" />
                   </Link>
                   
@@ -149,6 +158,10 @@ export default function PromocionesPage() {
           style={{ backgroundImage: `radial-gradient(circle at 2px 2px, rgba(230,237,243,0.05) 1px, transparent 0)`, backgroundSize: '40px 40px' }} 
         />
       </section>
+
+      {/* Cinematic Sponsors Slider */}
+      <SponsorsSlider />
+
 
       <Footer />
     </main>
