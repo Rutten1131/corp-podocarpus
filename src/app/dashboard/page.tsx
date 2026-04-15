@@ -1,7 +1,7 @@
 "use client";
 
-import { KPI, INGRESOS_MENSUALES, OCUPACION_RUTAS } from "@/lib/mock-data";
-import { Users, AlertTriangle, TrendingUp, TrendingDown, Filter } from "lucide-react";
+import { KPI, INGRESOS_MENSUALES, OCUPACION_RUTAS, NOTIFICACIONES_RECIENTES } from "@/lib/mock-data";
+import { Users, AlertTriangle, TrendingUp, TrendingDown, Filter, Bell, XCircle, Zap, ShieldCheck, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import {
   AreaChart,
@@ -59,29 +59,29 @@ export default function DashboardPage() {
         className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8"
       >
         <KpiCard
-          title="Socios Activos"
+          title="Clientes Activos"
           value={`${KPI.sociosActivos}/${KPI.totalSocios}`}
-          trend="+2 este periodo"
-          positive={true}
+          trend={`${KPI.totalSocios - KPI.sociosActivos} inactivos (Retargeting)`}
+          positive={false}
           icon={<Users className="text-andina-primary" size={24} />}
         />
         <KpiCard
-          title="Flujo Mensual"
-          value={`$${KPI.ingresoMensual.toLocaleString()}`}
-          trend="+4.2% rendimiento"
-          positive={true}
-          icon={<DollarSign className="text-white" />}
+          title="Cancelaciones del Mes"
+          value={`4 bajas`}
+          trend="Impacto: -$160 (mensualidades)"
+          positive={false}
+          icon={<XCircle className="text-white" size={24} />}
           primary
         />
         <KpiCard
-          title="Morosidad Global"
-          value={`${KPI.morosidad}%`}
-          trend="-1.5% mitigaci&oacute;n"
+          title="Notificaciones Autom&aacute;ticas"
+          value={`1,024`}
+          trend="+15% efectividad de cobro"
           positive={true}
-          icon={<Users className="text-andina-accent" size={24} />}
+          icon={<Bell className="text-andina-accent" size={24} />}
         />
         <KpiCard
-          title="Mantenimientos"
+          title="Mantenimiento de mi Unidad"
           value={KPI.mantenimientosPendientes.toString()}
           trend={`${KPI.documentosVencidos} alertas cr&iacute;ticas`}
           positive={false}
@@ -102,8 +102,8 @@ export default function DashboardPage() {
              <TrendingUp size={200} />
           </div>
           <div className="mb-10 relative z-10">
-            <h3 className="text-2xl font-black text-white italic tracking-tight">An&aacute;lisis de Caja Proyectado</h3>
-            <p className="text-[10px] font-black font-mono text-andina-text/40 uppercase tracking-[0.4em] mt-2 italic">Performance Operativo / Gastos vs Ingresos</p>
+            <h3 className="text-2xl font-black text-white italic tracking-tight">Proyecci&oacute;n de Ingresos del Mes Actual</h3>
+            <p className="text-[10px] font-black font-mono text-andina-text/40 uppercase tracking-[0.4em] mt-2 italic">Identificando los ingresos proyectados y los reales</p>
           </div>
           <div className="h-[400px] w-full relative z-10">
             <ResponsiveContainer width="100%" height="100%">
@@ -127,8 +127,8 @@ export default function DashboardPage() {
                   labelStyle={{ color: 'rgba(255,255,255,0.3)', fontWeight: '900', fontSize: '9px', marginBottom: '8px', fontFamily: 'var(--font-mono)' }}
                   formatter={(value: any) => [`$${Number(value).toLocaleString()}`, undefined] as any}
                 />
-                <Area type="monotone" dataKey="ingresos" name="Ingresos" stroke="#22c55e" strokeWidth={5} fillOpacity={1} fill="url(#colorIngresos)" animationDuration={2000} />
-                <Area type="monotone" dataKey="gastos" name="Gastos" stroke="#C9A84C" strokeWidth={5} fillOpacity={1} fill="url(#colorGastos)" animationDuration={2500} />
+                <Area type="monotone" dataKey="ingresos" name="Reales" stroke="#22c55e" strokeWidth={5} fillOpacity={1} fill="url(#colorIngresos)" animationDuration={2000} />
+                <Area type="monotone" dataKey="gastos" name="Proyectados" stroke="#C9A84C" strokeWidth={5} fillOpacity={1} fill="url(#colorGastos)" animationDuration={2500} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -137,7 +137,7 @@ export default function DashboardPage() {
         <div className="xl:col-span-12 2xl:col-span-4 bg-andina-surface/30 backdrop-blur-3xl rounded-[3rem] border border-white/5 shadow-3xl p-8 md:p-10 flex flex-col relative overflow-hidden group">
           <div className="mb-10">
             <h3 className="text-2xl font-black text-white italic tracking-tight">Efectividad de Rutas</h3>
-            <p className="text-[10px] font-black font-mono text-andina-text/40 uppercase tracking-[0.4em] mt-2 italic">Ocupaci&oacute;n / Cobertura Territorial</p>
+            <p className="text-[10px] font-black font-mono text-andina-text/40 uppercase tracking-[0.4em] mt-2 italic">Ocupaci&oacute;n / Morosidad proyectada</p>
           </div>
           <div className="flex-1 h-[400px]">
             <ResponsiveContainer width="100%" height="100%">
@@ -159,9 +159,14 @@ export default function DashboardPage() {
                   itemStyle={{ fontFamily: 'var(--font-sans)', color: '#fff', fontSize: '10px', fontWeight: '900' }}
                   formatter={(value: any) => [`${value}%`, 'Ocupación'] as any}
                 />
-                <Bar dataKey="ocupacion" radius={[0, 12, 12, 0]} barSize={24} animationDuration={2000}>
+                <Bar dataKey="ocupacion" name="Ocupación" radius={[0, 12, 12, 0]} barSize={16} animationDuration={2000}>
                   {OCUPACION_RUTAS.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.ocupacion > 90 ? '#C9A84C' : entry.ocupacion < 70 ? 'rgba(255,255,255,0.05)' : '#22c55e'} />
+                    <Cell key={`cell-occ-${index}`} fill={entry.ocupacion > 90 ? '#22c55e' : entry.ocupacion < 70 ? 'rgba(255,255,255,0.05)' : '#22c55e'} />
+                  ))}
+                </Bar>
+                <Bar dataKey="morosidad" name="Morosidad" radius={[0, 12, 12, 0]} barSize={16} animationDuration={2500}>
+                  {OCUPACION_RUTAS.map((entry, index) => (
+                    <Cell key={`cell-mor-${index}`} fill={entry.morosidad > 20 ? '#FF4D4D' : '#C9A84C'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -171,6 +176,79 @@ export default function DashboardPage() {
              <span>Demanda Promedio</span>
              <span className="text-white">82%</span>
           </div>
+        </div>
+      </motion.div>
+
+      {/* Dynamic Intelligence Section */}
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 1 }}
+        className="grid grid-cols-1 xl:grid-cols-3 gap-8 pb-10"
+      >
+        {/* Notifications Feed */}
+        <div className="xl:col-span-2 bg-andina-surface/20 backdrop-blur-3xl rounded-[3rem] border border-white/5 p-8 overflow-hidden group">
+           <div className="flex items-center justify-between mb-8">
+              <div>
+                 <h3 className="text-xl font-black text-white italic tracking-tight">Actividad Autom&aacute;tica</h3>
+                 <p className="text-[9px] font-black font-mono text-andina-text/40 uppercase tracking-[0.4em] mt-1">Inteligencia Artificial en ejecuci&oacute;n</p>
+              </div>
+              <div className="w-12 h-12 rounded-2xl bg-andina-primary/10 flex items-center justify-center text-andina-primary border border-andina-primary/20 animate-pulse">
+                 <Zap size={20} />
+              </div>
+           </div>
+           
+           <div className="space-y-4">
+              {NOTIFICACIONES_RECIENTES.map((notif) => (
+                 <div key={notif.id} className="flex items-center justify-between p-5 rounded-[1.8rem] bg-white/[0.03] border border-white/5 hover:bg-white/[0.05] transition-all group/item">
+                    <div className="flex items-center gap-4">
+                       <div className={`w-10 h-10 rounded-xl flex items-center justify-center
+                          ${notif.estado === 'exitoso' ? 'bg-andina-primary/10 text-andina-primary' : 
+                            notif.estado === 'alerta' ? 'bg-[#C9A84C]/10 text-[#C9A84C]' : 
+                            notif.estado === 'critico' ? 'bg-[#FF4D4D]/10 text-[#FF4D4D]' : 'bg-white/10 text-white'}`}>
+                          {notif.estado === 'exitoso' ? <ShieldCheck size={18} /> : 
+                           notif.estado === 'alerta' ? <AlertTriangle size={18} /> : 
+                           notif.estado === 'critico' ? <XCircle size={18} /> : <Info size={18} />}
+                       </div>
+                       <div>
+                          <p className="text-xs font-bold text-white tracking-tight">{notif.mensaje}</p>
+                          <p className="text-[9px] font-black uppercase text-andina-text/30 mt-1 font-mono tracking-widest">{notif.hora} • SISTEMA AUTÓNOMO</p>
+                       </div>
+                    </div>
+                    <button className="opacity-0 group-hover/item:opacity-100 transition-opacity text-[9px] font-black uppercase tracking-widest text-andina-primary">Detalles</button>
+                 </div>
+              ))}
+           </div>
+        </div>
+
+        {/* Retargeting Card */}
+        <div className="bg-gradient-to-br from-[#C9A84C]/20 to-[#050a08] rounded-[3rem] border border-[#C9A84C]/30 p-8 flex flex-col justify-between relative overflow-hidden group">
+           <div className="absolute top-[-20%] right-[-10%] w-60 h-60 bg-[#C9A84C]/10 blur-[80px] rounded-full pointer-events-none"></div>
+           
+           <div>
+              <div className="w-14 h-14 rounded-2xl bg-[#C9A84C] text-black flex items-center justify-center mb-6 shadow-2xl shadow-[#C9A84C]/20 rotate-3 group-hover:rotate-12 transition-transform duration-500">
+                 <Users size={28} />
+              </div>
+              <h3 className="text-2xl font-black text-white italic tracking-tight leading-none mb-2">Oportunidad de Retargeting</h3>
+              <p className="text-[10px] text-andina-text/60 leading-relaxed font-medium">
+                 Hemos detectado <span className="text-[#C9A84C] font-black">3 ex-clientes</span> que suspendieron su servicio recientemente. Est&aacute;n en rutas con alta disponibilidad. 
+              </p>
+           </div>
+
+           <div className="mt-8 space-y-3">
+              <div className="p-4 rounded-2xl bg-black/40 border border-white/5 backdrop-blur-md">
+                 <div className="flex justify-between items-center mb-1">
+                    <span className="text-[9px] font-black uppercase tracking-widest text-andina-text/40">Recuperaci&oacute;n Estimada</span>
+                    <span className="text-andina-primary font-black text-xs">+$180 / mes</span>
+                 </div>
+                 <div className="w-full h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div className="w-[65%] h-full bg-andina-primary"></div>
+                 </div>
+              </div>
+              <button className="w-full py-4 bg-[#C9A84C] hover:bg-white text-black font-black uppercase tracking-[0.2em] text-[10px] rounded-2xl transition-all shadow-xl active:scale-95">
+                 Iniciar Campaña Autom&aacute;tica
+              </button>
+           </div>
         </div>
       </motion.div>
     </div>

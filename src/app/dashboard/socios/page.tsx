@@ -1,19 +1,30 @@
 "use client";
 
 import { SOCIOS } from "@/lib/mock-data";
-import { Search, Plus, Filter, MoreVertical, ShieldAlert, CheckCircle2, X } from "lucide-react";
+import { Search, Plus, Filter, MoreVertical, ShieldAlert, CheckCircle2, X, ArrowLeft } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function SociosPage() {
-  const [selectedSocio, setSelectedSocio] = useState<any>(null);
+  const searchParams = useSearchParams();
+  const role = searchParams.get('role') || 'socio';
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-        <div>
-          <h2 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter drop-shadow-lg"> Directivo de <span className="text-andina-primary">Socios</span></h2>
-          <p className="text-andina-text/80 text-xs font-mono uppercase tracking-[0.2em] mt-1 font-bold">Gestión de conductores y padrón cooperativo</p>
+        <div className="flex items-center gap-4">
+          <Link 
+            href={`/dashboard?role=${role}`}
+            className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-andina-text hover:bg-andina-primary/20 hover:text-andina-primary transition-all active:scale-95"
+          >
+            <ArrowLeft size={18} />
+          </Link>
+          <div>
+            <h2 className="text-2xl md:text-3xl font-heading font-black text-white tracking-tighter drop-shadow-lg"> Directivo de <span className="text-andina-primary">Socios</span></h2>
+            <p className="text-andina-text/80 text-xs font-mono uppercase tracking-[0.2em] mt-1 font-bold">Gestión de conductores y padrón cooperativo</p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <button className="flex-1 md:flex-none flex items-center justify-center gap-2 bg-andina-surface border border-andina-border px-5 py-3 rounded-xl text-xs font-black uppercase tracking-widest text-andina-text hover:bg-white/5 transition-all shadow-xl">

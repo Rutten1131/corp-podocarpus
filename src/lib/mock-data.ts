@@ -165,12 +165,20 @@ export const INGRESOS_MENSUALES = [
 ];
 
 export const OCUPACION_RUTAS = [
-  { ruta: "Ruta 1", ocupacion: 86 },
-  { ruta: "Ruta 2", ocupacion: 94 },
-  { ruta: "Ruta 3", ocupacion: 78 },
-  { ruta: "Ruta 4", ocupacion: 73 },
-  { ruta: "Ruta 5", ocupacion: 100 },
-  { ruta: "Ruta 6", ocupacion: 68 },
-  { ruta: "Ruta 7", ocupacion: 92 },
-  { ruta: "Ruta 8", ocupacion: 56 },
+  { ruta: "Ruta 1", ocupacion: 86, morosidad: 15 },
+  { ruta: "Ruta 2", ocupacion: 94, morosidad: 5 },
+  { ruta: "Ruta 3", ocupacion: 78, morosidad: 22 },
+  { ruta: "Ruta 4", ocupacion: 73, morosidad: 18 },
+  { ruta: "Ruta 5", ocupacion: 100, morosidad: 0 },
+  { ruta: "Ruta 6", ocupacion: 68, morosidad: 35 },
+  { ruta: "Ruta 7", ocupacion: 92, morosidad: 8 },
+  { ruta: "Ruta 8", ocupacion: 56, morosidad: 45 },
+];
+
+export const NOTIFICACIONES_RECIENTES = [
+  { id: 1, tipo: 'cobro', mensaje: 'SMS de cobro enviado a Roberto Maldonado', hora: 'Hace 5 min', estado: 'exitoso' },
+  { id: 2, tipo: 'mantenimiento', mensaje: 'Alerta técnica: Unidad U-04 requiere cambio de aceite', hora: 'Hace 12 min', estado: 'alerta' },
+  { id: 3, tipo: 'pago', mensaje: 'Pago recibido: $60 (Sofía Maldonado)', hora: 'Hace 25 min', estado: 'exitoso' },
+  { id: 4, tipo: 'suspension', mensaje: 'Servicio suspendido automáticamente: Juan Pérez (3 meses mora)', hora: 'Hace 1 hora', estado: 'critico' },
+  { id: 5, tipo: 'retargeting', mensaje: 'Oportunidad de recuperación: 3 ex-clientes detectados en el sector Norte', hora: 'Hace 2 horas', estado: 'info' },
 ];
