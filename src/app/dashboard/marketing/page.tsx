@@ -3,9 +3,84 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Megaphone, PenTool, Share2, Calendar, Sparkles, Send, ChevronRight, Plus } from "lucide-react";
 import { useState } from "react";
+import { Image as ImageIcon, Loader2 } from "lucide-react";
+
 
 export default function MarketingPage() {
   const [activeTab, setActiveTab] = useState("contenido");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [publishStatus, setPublishStatus] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+  const handlePublish = async () => {
+    if (!title || !content) {
+      setPublishStatus({ type: 'error', message: 'Por favor completa el título y el contenido.' });
+      return;
+    }
+
+    // Validar que mediaUrl no sea data URL (base64) — Make no puede procesarlo
+    let finalMediaUrl = mediaUrl;
+    if (finalMediaUrl.startsWith("data:")) {
+      setPublishStatus({
+        type: 'error',
+        message: '❌ La imagen subida no tiene una URL pública. Make.com necesita un enlace accesible. Pega una URL directa en el campo de texto.'
+      });
+      return;
+    }
+
+    setIsPublishing(true);
+    setPublishStatus(null);
+
+    try {
+      const response = await fetch('/api/marketing/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title,
+          content,
+          mediaUrl: finalMediaUrl,
+          platforms: ["facebook"]
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setPublishStatus({ type: 'success', message: '¡Autoridad publicada con éxito!' });
+        // Optionally clear form
+        // setTitle("");
+        // setContent("");
+        // setMediaUrl("");
+      } else {
+        throw new Error(data.error || 'Error al publicar');
+      }
+    } catch (error: any) {
+      setPublishStatus({ type: 'error', message: error.message });
+    } finally {
+      setIsPublishing(false);
+    }
+  };
+
+  const [mediaPreview, setMediaPreview] = useState("");
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMediaPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+      // Mostrar advertencia al usuario
+      setPublishStatus({
+        type: 'error',
+        message: '⚠️ Make.com necesita una URL pública. Usa el campo "Pegar URL" arriba, o sube la imagen a un servicio como Imgur, PostImage, etc. y pega el enlace.'
+      });
+    }
+  };
+
 
   return (
     <div className="space-y-10 animate-in fade-in slide-in-from-bottom-5 duration-1000">
@@ -134,23 +209,97 @@ export default function MarketingPage() {
                     <input 
                       type="text" 
                       placeholder="Título estratégico..."
+                      value={title}
+                      onChange={(e) => setTitle(e.target.value)}
                       className="w-full bg-black/40 border border-white/5 rounded-3xl px-8 py-6 text-xl font-black text-white placeholder:text-white/10 focus:outline-none focus:border-andina-primary/40 transition-all shadow-inner"
                     />
                   </div>
-                  <div className="relative group">
-                    <label className="absolute -top-3 left-6 text-[9px] text-andina-text/40 bg-[#050a08] px-3 font-black uppercase tracking-[0.2em] border border-white/10 rounded-full">Borrador de Ingeniería Social</label>
-                    <textarea 
-                      rows={14}
-                      placeholder="Empiece a redactar con el tono de voz de Podocarpus..."
-                      className="w-full bg-black/40 border border-white/5 rounded-3xl px-8 py-8 text-lg font-medium text-andina-text/80 placeholder:text-white/10 focus:outline-none focus:border-andina-primary/40 transition-all shadow-inner resize-none leading-relaxed"
-                    />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="relative group">
+                      <label className="absolute -top-3 left-6 text-[9px] text-andina-text/40 bg-[#050a08] px-3 font-black uppercase tracking-[0.2em] border border-white/10 rounded-full">Borrador de Ingeniería Social</label>
+                      <textarea 
+                        rows={14}
+                        placeholder="Empiece a redactar con el tono de voz de Podocarpus..."
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                        className="w-full bg-black/40 border border-white/5 rounded-3xl px-8 py-8 text-lg font-medium text-andina-text/80 placeholder:text-white/10 focus:outline-none focus:border-andina-primary/40 transition-all shadow-inner resize-none leading-relaxed"
+                      />
+                    </div>
+
+                    <div className="space-y-6">
+                      <div className="relative group">
+                        <label className="absolute -top-3 left-6 text-[9px] text-andina-text/40 bg-[#050a08] px-3 font-black uppercase tracking-[0.2em] border border-white/10 rounded-full">Multimedia (URL o Archivo)</label>
+                        <div className="space-y-4">
+                          <input 
+                            type="text" 
+                            placeholder="https://ejemplo.com/imagen.jpg (URL pública para Make)"
+                            value={mediaUrl}
+                            onChange={(e) => setMediaUrl(e.target.value)}
+                            className="w-full bg-black/40 border border-white/5 rounded-2xl px-6 py-4 text-sm font-medium text-white placeholder:text-white/10 focus:outline-none focus:border-andina-primary/40 transition-all shadow-inner"
+                          />
+                          <div className="flex items-center gap-4">
+                            <label className="flex-1 cursor-pointer group/upload">
+                              <div className="bg-white/5 border border-dashed border-white/10 rounded-2xl p-6 flex flex-col items-center justify-center gap-2 hover:border-andina-primary/40 hover:bg-andina-primary/5 transition-all">
+                                <ImageIcon size={24} className="text-andina-text/20 group-hover/upload:text-andina-primary transition-colors" />
+                                <span className="text-[10px] font-black uppercase tracking-widest text-andina-text/40">Subir Archivo</span>
+                              </div>
+                              <input type="file" className="hidden" accept="image/*,video/*" onChange={handleFileChange} />
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Preview: prioriza la URL real, sino la previsualización del archivo */}
+                      {(mediaUrl || mediaPreview) && (
+                        <div className="aspect-video bg-black/40 border border-white/5 rounded-3xl overflow-hidden relative group">
+                          {(mediaUrl || mediaPreview).startsWith('data:video') ? (
+                            <video src={mediaUrl || mediaPreview} className="w-full h-full object-cover" controls />
+                          ) : (
+                            <img src={mediaUrl || mediaPreview} alt="Preview" className="w-full h-full object-cover" />
+                          )}
+                          <button 
+                            onClick={() => { setMediaUrl(""); setMediaPreview(""); }}
+                            className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-xl text-white/40 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                          >
+                            <Plus size={16} className="rotate-45" />
+                          </button>
+                          {mediaPreview && !mediaUrl && (
+                            <div className="absolute bottom-4 left-4 right-4 bg-yellow-500/20 backdrop-blur-md border border-yellow-500/30 rounded-xl px-4 py-2 text-[9px] font-black text-yellow-400 uppercase tracking-wider text-center">
+                              ⚠️ Solo para previsualización. Make necesita una URL pública.
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
+
+                  {publishStatus && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`p-4 rounded-2xl border ${
+                        publishStatus.type === 'success' 
+                          ? 'bg-andina-primary/10 border-andina-primary/20 text-andina-primary' 
+                          : 'bg-red-500/10 border-red-500/20 text-red-500'
+                      } text-xs font-black uppercase tracking-widest text-center`}
+                    >
+                      {publishStatus.message}
+                    </motion.div>
+                  )}
+
                   <div className="flex flex-col sm:flex-row justify-end gap-6 items-center">
                     <button className="text-[10px] font-black uppercase tracking-[0.2em] text-andina-text/20 hover:text-white transition-colors">Guardar en Nube</button>
-                    <button className="w-full sm:w-auto bg-andina-primary px-10 py-5 rounded-2xl text-white text-xs font-black uppercase tracking-[0.2em] hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:-translate-y-1 transition-all flex items-center justify-center gap-3 active:scale-95">
-                      <Send size={18} /> Publicar Autoridad
+                    <button 
+                      onClick={handlePublish}
+                      disabled={isPublishing}
+                      className="w-full sm:w-auto bg-andina-primary px-10 py-5 rounded-2xl text-white text-xs font-black uppercase tracking-[0.2em] hover:shadow-[0_0_30px_rgba(34,197,94,0.3)] hover:-translate-y-1 transition-all flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {isPublishing ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                      {isPublishing ? "Publicando..." : "Publicar Autoridad"}
                     </button>
                   </div>
+
                 </div>
               </motion.div>
             )}

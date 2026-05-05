@@ -22,7 +22,7 @@ import {
   Banknote,
   TrendingUp
 } from "lucide-react";
-import { PodocarpusLogo } from "./PodocarpusLogo";
+import { EntreRiosLogo } from "./EntreRiosLogo";
 
 import { NAV_COOPERATIVA, NAV_SOCIO } from "@/lib/navigation";
 import { useModuleContext } from "@/context/module-context";
@@ -76,10 +76,10 @@ export default function Sidebar() {
       >
         <div className="flex items-center justify-between px-4 h-16 border-b border-andina-border bg-andina-bg/20">
           <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <PodocarpusLogo size="sm" />
+            <EntreRiosLogo size="sm" />
             {(!collapsed || isMobileOpen) && (
               <div className="overflow-hidden">
-                <h1 className="text-sm font-heading font-black tracking-tight text-white uppercase truncate">Podocarpus</h1>
+                <h1 className="text-sm font-heading font-black tracking-tight text-white uppercase truncate">Entre Ríos</h1>
                 <p className="text-[9px] text-andina-primary font-mono uppercase tracking-widest font-black">Autoridad Andina</p>
               </div>
             )}
@@ -161,10 +161,10 @@ export function TopBar() {
             <Menu size={26} />
           </button>
           <div className="flex items-center gap-3">
-            <PodocarpusLogo size="sm" />
+            <EntreRiosLogo size="sm" />
             <div className="flex flex-col justify-center">
               <span className="text-xs font-black text-white uppercase tracking-tighter leading-none">
-                Podocarpus
+                Entre Ríos
               </span>
               <span className="text-andina-primary font-mono tracking-[0.2em] text-[8px] font-black uppercase mt-0.5">
                 {role === "socio" ? "Operativa Socio" : "Gestión Gerencial"}
@@ -192,7 +192,7 @@ export function TopBar() {
         <div className="flex items-center gap-3 pl-4 md:pl-6 border-l border-andina-border">
           <div className="text-right hidden xs:block">
             <p className="text-xs font-black text-white tracking-tight leading-none mb-1">
-               {role === "socio" ? "Socio Operativo" : "Adm. Podocarpus"}
+               {role === "socio" ? "Socio Operativo" : "Adm. Entre Ríos"}
             </p>
             <div className="flex items-center justify-end gap-1.5">
               <div className="w-1 h-1 rounded-full bg-andina-primary animate-ping" />

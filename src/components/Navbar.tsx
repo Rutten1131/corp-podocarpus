@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import { PodocarpusLogo } from "./PodocarpusLogo";
+import { EntreRiosLogo } from "./EntreRiosLogo";
 
 const navLinks = [
   { name: "Inicio", href: "/" },
@@ -32,9 +32,9 @@ export function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-4 group">
-          <PodocarpusLogo size="md" />
+          <EntreRiosLogo size="md" />
           <span className="text-xl font-heading font-black text-white tracking-tighter uppercase group-hover:text-andina-primary transition-colors">
-            Podocarpus
+            Entre Ríos
           </span>
         </Link>
 

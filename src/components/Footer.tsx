@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ShieldCheck, Mail, Phone, MapPin } from "lucide-react";
-import { PodocarpusLogo } from "./PodocarpusLogo";
+import { EntreRiosLogo } from "./EntreRiosLogo";
 
 // Inline Social Icons to avoid missing dependencies in local lucide-react version
 const FacebookIcon = ({ size }: { size: number }) => (
@@ -23,9 +23,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
           <div className="space-y-6">
             <Link href="/" className="flex items-center gap-4">
-              <PodocarpusLogo size="md" />
+              <EntreRiosLogo size="md" />
               <span className="text-xl font-heading font-black text-white tracking-tighter uppercase">
-                Podocarpus
+                Entre Ríos
               </span>
             </Link>
             <p className="text-andina-text/80 text-sm leading-relaxed max-w-xs font-medium">
@@ -61,14 +61,14 @@ export function Footer() {
             <ul className="space-y-4 text-sm text-andina-text/80 font-medium">
               <li className="flex gap-3 items-center"><MapPin size={18} className="text-andina-primary" /> Loja, Ecuador</li>
               <li className="flex gap-3 items-center"><Phone size={18} className="text-andina-primary" /> +593 7 2XXXXXX</li>
-              <li className="flex gap-3 items-center"><Mail size={18} className="text-andina-primary" /> gerencia@podocarpus.com</li>
+              <li className="flex gap-3 items-center"><Mail size={18} className="text-andina-primary" /> gerencia@entrerios.com</li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-[10px] text-andina-text/50 font-mono tracking-widest uppercase font-bold text-center md:text-left">
-            © 2026 Cooperativa de Transportes Podocarpus. Autoridad Andina.
+            © 2026 Cooperativa de Transportes Entre Ríos. Autoridad Andina.
           </p>
           <div className="flex items-center gap-2 text-[10px] text-andina-text/60 font-mono uppercase tracking-tighter font-black bg-white/5 px-4 py-2 rounded-full border border-white/5 shadow-2xl">
             <ShieldCheck size={14} className="text-andina-primary" />
